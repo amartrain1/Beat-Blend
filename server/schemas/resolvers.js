@@ -1,4 +1,5 @@
-const { User, Comment } = require('../models');
+const { User, Comment, Bio } = require("../models");
+const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
 
 const resolvers = {
@@ -32,7 +33,7 @@ const resolvers = {
     },
     getComments: async () => {
       try {
-        console.log('anything')
+        console.log("anything");
         const comments = await Comment.find({});
         return comments;
       } catch (error) {
@@ -70,23 +71,36 @@ const resolvers = {
     },
     addComment: async (parent, { commentText }, context) => {
       if (context.user) {
-        return Comment.findOneAndUpdate(
+        const comment = await Comment.create({
+          tCommentText,
+          CommentAuthor: context.user.username,
+        });
 
-          { _id: Comment },
-
-          {
-            $addToSet: {
-              comments: { commentText, commentAuthor: context.user.username },
-            },
-          },
-          {
-            new: true,
-            runValidators: true,
-          }
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { comments: comment._id } }
         );
+
+        return comment;
       }
-      throw new AuthenticationError("You need to be logged in!");
+      // throw new AuthenticationError("You need to be logged in!");
     },
+
+    addBio: async (_, { bioText }, context) => {
+      if (context.user) {
+        const comment = new Bio({
+          bioText,
+          bioAuthor: context.user.username,
+        });
+
+        await Bio.save();
+
+        return Bio;
+      }
+
+      // throw new AuthenticationError("You need to be logged in!");
+    },
+
     updateUser: async (_, { id, username, email }) => {
       try {
         const user = await User.findByIdAndUpdate(
