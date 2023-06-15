@@ -29,9 +29,14 @@ app.post('/signup', async (req, res) => {
   try {
     const { username, email, password } = req.body;
     
-    const existingUser = await User.findOne({ email });
-    if(existingUser) {
-      return res.status(409).json({ message: 'User already exists' });
+    const existingUserEmail = await User.findOne({ email });
+    if(existingUserEmail) {
+      return res.status(409).json({ message: 'User with that email already exists' });
+    }
+
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return res.status(409).json({ message: 'User with that username already exists' });
     }
     
     
@@ -40,7 +45,7 @@ app.post('/signup', async (req, res) => {
     res.status(201).json({ user: newUser });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: error });
   }
 });
 

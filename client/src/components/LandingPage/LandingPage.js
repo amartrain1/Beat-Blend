@@ -11,6 +11,8 @@ const LandingPage = () => {
   const [signUp, setSignUp] = useState(true);
   const navigate = useNavigate();
 
+  const [error, setError] = useState(false);
+
   const handleSignUp = async (formData) => {
     try {
       const token = localStorage.getItem("token");
@@ -31,7 +33,7 @@ const LandingPage = () => {
       } else {
         const data = await response.json();
         console.error(data.message);
-        alert('Invalid credentials')
+        setError(data.message)
       }
     } catch (error) {
       console.error(error);
@@ -59,7 +61,7 @@ const LandingPage = () => {
       } else {
         const data = await response.json();
         console.error(data.message);
-        alert('Invalid credentials')
+        setError('Username or password is incorrect')
       }
     } catch (error) {
       console.error(error);
@@ -71,6 +73,7 @@ const LandingPage = () => {
       return;
     }
     setSignUp(false);
+    setError('')
   };
 
   const signUpClicked = () => {
@@ -78,6 +81,7 @@ const LandingPage = () => {
       return;
     }
     setSignUp(true);
+    setError('');
   }
 
   return (
@@ -100,9 +104,9 @@ const LandingPage = () => {
         </div>
         <AnimatePresence>
           {signUp ? (
-            <SignUpForm handleSignUp={handleSignUp} />
+            <SignUpForm handleSignUp={handleSignUp} error={error} setError={setError}/>
           ) : (
-            <LogInForm handleLogIn={handleLogIn} />
+            <LogInForm handleLogIn={handleLogIn} error={error} setError={setError}/>
           )}
         </AnimatePresence>
       </div>
