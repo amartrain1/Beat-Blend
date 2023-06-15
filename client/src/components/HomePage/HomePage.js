@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+//useRef hook added
 import HeaderNav from "../Header/HeaderNav";
 import "./homePage.css";
 import Feed from "./pages/Feed/Feed";
@@ -14,6 +15,7 @@ import EditProfile from "./pages/EditProfile/EditProfile";
 
 const HomePage = () => {
   const [length, setLength] = useState(0);
+  //adds state variable to track the selected audio file
   const [selectedAudio, setSelectedAudio] = useState(null);
 
   function countLength() {
@@ -60,12 +62,12 @@ const HomePage = () => {
   const handlePageChange = (pageName) => {
     setPage(pageName);
   };
-
+//function to handle the upload of the selected audio file
   const handleUploadAudio = () => {
     inputFileRef.current.click();
   };
-
   const handleAudioSelection = (event) => {
+    //function to handle file selection
     const file = event.target.files[0];
     setSelectedAudio(file);
   };
@@ -194,15 +196,23 @@ const HomePage = () => {
                 Upload Audio
               </div>
               <input
+              //reference to the input element allowing programmatic access
+              //inputFileRef = variable that was created using the 'useRef hook in React component, imported on line 1 from 'react'
                 ref={inputFileRef}
+                //sets input type to 'file'
                 type="file"
+                //audio/* means it accepts only audio files
                 accept="audio/*"
+                //sets display property of the input element to 'none'
                 style={{ display: "none" }}
+
                 onChange={handleAudioSelection}
               />
               <div className="upload postBtn">Monetize?</div>
             </div>
-            <div className="post bigPostBtn" onClick={handleAudioUpload}>Post!</div>
+            <div className="post bigPostBtn" onClick={handleAudioUpload}>
+              Post!
+            </div>
           </div>
         </div>
       </div>
