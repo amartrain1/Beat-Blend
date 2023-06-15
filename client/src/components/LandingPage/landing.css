@@ -24,7 +24,7 @@
 }
 
 .inputContainer {
-  height: 50%;
+  height: 55%;
   width: 35%;
   /* border: solid rgba(217,130,130,.1) .5px; */
   background: #c0c0c0;
@@ -55,6 +55,7 @@
   border-radius: 0.4rem;
   border: none;
   font-family: "Work Sans", sans-serif;
+  outline: none;
 }
 
 .buttons {
@@ -121,6 +122,12 @@
   background-color: #be4c4c;
   transform: scale(0.9);
   box-shadow: 0px 0px 30px 0px #d98282;
+}
+
+.alertText {
+  font-size: 1.25rem;
+  margin: 1rem;
+  color: var(--red);
 }
 
 @media screen and (max-width: 480px) {

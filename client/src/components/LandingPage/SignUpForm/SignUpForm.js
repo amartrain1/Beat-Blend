@@ -60,7 +60,7 @@ const SignUpForm = ({handleSignUp, error, setError }) => {
           onChange={handleChange}
         />
         <button className='submit' type='submit'>Sign Up</button>
-        {error && <p>{error}</p>}
+      {error && <p className="alertText"><i>{error}</i></p>}
       </form>
     </motion.div>
   );
