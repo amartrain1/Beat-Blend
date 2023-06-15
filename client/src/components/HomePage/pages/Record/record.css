@@ -1,0 +1,96 @@
+.recordHeader {
+    text-align: center;
+    width: 100%;
+    font-size: 2rem;
+    padding-block: 1rem;
+    color: var(--black);
+    border-bottom: solid rgba(255, 255, 255, 0.232) 1px;
+    background: rgb(190, 76, 76);
+}
+
+.mainRecordContainer {
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stopRecord {
+    background: var(--gray);
+    background-color: #be4c4c;
+    transform: scale(.9);
+    font-size: 1.2rem;
+    margin: 1rem;
+    padding: .75rem 1.5rem;
+    border-radius: .5rem;
+    transition: background-color .5s, box-shadow .5s, transform .5s;
+
+}
+
+
+.playAll {
+    background-color: #be4c4c;
+    transform: scale(.9);
+    /* box-shadow: 0px 0px 15px 0px #d98282; */
+    font-size: 1.2rem;
+    margin: 1rem;
+    padding: .75rem 1.5rem;
+    border-radius: .5rem;
+    transition: background-color .5s, box-shadow .5s, transform .5s;
+}
+
+.playAll:hover {
+    background-color: #be4c4c;
+}
+
+.stop {
+    background-color: #be4c4c;
+    transform: scale(.9);
+    /* box-shadow: 0px 0px 15px 0px #d98282; */
+    font-size: 1.2rem;
+    margin: 1rem;
+    padding: .75rem 1.5rem;
+    border-radius: .5rem;
+    transition: background-color .5s, box-shadow .5s, transform .5s;
+}
+
+.stop:hover {
+    background-color: #be4c4c;
+}
+
+.delete {
+    background-color: #be4c4c;
+    transform: scale(.9);
+    /* box-shadow: 0px 0px 15px 0px #d98282; */
+    font-size: 1.2rem;
+    margin: 1rem;
+    padding: .75rem 1.5rem;
+    border-radius: .5rem;
+    transition: background-color .5s, box-shadow .5s, transform .5s;
+}
+
+.delete:hover {
+    background-color: #be4c4c;
+}
+
+.download {
+    background-color: #be4c4c;
+    transform: scale(.9);
+    /* box-shadow: 0px 0px 15px 0px #d98282; */
+    font-size: 1.2rem;
+    margin: 1rem;
+    padding: .75rem 1.5rem;
+    border-radius: .5rem;
+    transition: background-color .5s, box-shadow .5s, transform .5s;
+}
+
+.download:hover {
+    background-color: #be4c4c;
+}
+
+.rec {
+    
+}
+.mic {
+    background-color: #be4c4c;
+}
