@@ -1,21 +1,25 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const SignUpForm = ({handleSignUp}) => {
+const SignUpForm = ({handleSignUp, error, setError }) => {
   const [formData, setFormData] = useState({
     email: "",
     username: "",
     password: "",
     confirmPassword: "",
   });
-
+  
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleSignUp(formData);
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+    } else {
+      handleSignUp(formData);
+    }
   }
 
   return (
@@ -56,6 +60,7 @@ const SignUpForm = ({handleSignUp}) => {
           onChange={handleChange}
         />
         <button className='submit' type='submit'>Sign Up</button>
+        {error && <p>{error}</p>}
       </form>
     </motion.div>
   );
