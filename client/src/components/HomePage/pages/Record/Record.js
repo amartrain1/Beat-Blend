@@ -7,13 +7,11 @@ import React, { useState, useEffect } from "react";
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import "./record.css";
 
-
-export default function App() {
+const Record = () => {
   const recorderControls = useAudioRecorder(
     {
       noiseSuppression: true,
       echoCancellation: true,
-     
     },
     (err) => console.table(err)
   );
@@ -76,47 +74,29 @@ export default function App() {
     link.click();
   };
 
-  const Record = () => {
-    return (
-      <>
-        <div className="recordHeader">Record</div>
-        <div className="mainRecordContainer"></div>
-      </>
-    );
-  };
-
   return (
-    <div className="centered">
-      <div className="rec">
-        <Record /> {/* Render the Record component */}
-        <AudioRecorder
-          classes={{
-            AudioRecorderClass: "mic",
-          }}
-          onRecordingComplete={(beepbop) => addAudioElement(beepbop)}
-          recorderControls={recorderControls}
-          showVisualizer={true}
-        />
-        <br />
-        <button className="stopRecord" onClick={recorderControls.stopRecording}>
-          Stop recording
-        </button>
-        <br />
-        <button className="playAll" onClick={handlePlayback}>
-          Play All
-        </button>
-        <div>
+    <>
+      <div className="recordHeader">Record</div>
+      <div className="mainRecordContainer">
+        <div className="recContainer">
+          <AudioRecorder
+            classes={{
+              AudioRecorderClass: "mic",
+            }}
+            onRecordingComplete={(beepbop) => addAudioElement(beepbop)}
+            recorderControls={recorderControls}
+            showVisualizer={true}
+          />
+        </div>
+        <div className="playbackBtnContainer">
           {audioElements.map((audio, index) => (
-            <div key={index}>
-              <audio src={audio.src} controls />
-              <button className="stop" onClick={() => handleStop(index)}>
-                Stop
-              </button>
-              <button className="delete" onClick={() => handleDelete(index)}>
+            <div className="singleRecording" key={index}>
+              <audio class="play" src={audio.src} controls />
+              <button className="recordBtn" onClick={() => handleDelete(index)}>
                 Delete
               </button>
               <button
-                className="download"
+                className="recordBtn"
                 onClick={() => handleDownload(index)}
               >
                 Download
@@ -125,6 +105,8 @@ export default function App() {
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
-}
+};
+
+export default Record;
