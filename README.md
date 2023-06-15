@@ -1,5 +1,7 @@
 # Beat Blend
 
+FOR ACCURATE CONTRIBUTIONS, REFER TO THIS REPOSITORY https://github.com/mrobles-dev/Beat-Blend. ISSUES REQUIRED US TO MAKE A NEW REPOSITORY
+
 ## Table of Contents
 
 - [Description](#project-description)
