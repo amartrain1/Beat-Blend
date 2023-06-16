@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
+import jwtDecode from 'jwt-decode';
+import './profile.css';
 
 const GET_USER = gql`
   query GetUser($userId: ID!) {
@@ -11,13 +13,22 @@ const GET_USER = gql`
 `;
 
 const Profile = () => {
-  const [userData, setUserData] = useState(null);
-  const { loading, error, data } = useQuery(GET_USER, {
-    variables: { userId: 'user-id-here' }, // Replace with the actual user ID
+  const token = localStorage.getItem('id_token');
+  const decodedToken = jwtDecode(token);
+  const userId = decodedToken.data._id;
+  console.log("userId:", userId);
+
+  const { data, loading, error } = useQuery(GET_USER, {
+    variables: {
+      userId: userId,
+    },
   });
+
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     if (!loading && data) {
+      console.log("Retrieved user data", data.getUser);
       setUserData(data.getUser);
     }
   }, [loading, data]);
@@ -27,7 +38,7 @@ const Profile = () => {
   }
 
   if (error) {
-    return <div>Error fetching user data</div>;
+    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -35,11 +46,11 @@ const Profile = () => {
       <div className="profileHeader">Your Profile</div>
       <div className="mainProfileContainer">
         {/* Render the user data */}
-        {userData && (
+        {data && data.getUser && (
           <div className="userProfileInfo">
-            <img className="profilePfp" src={userData.profilePicture}></img>
-            <div className="profileUsername">{userData.username}</div>
-            <p className="profileBio">{userData.bio}</p>
+            {/* <img className="profilePfp" src={data.getUser.profilePicture} alt="Profile Picture" /> */}
+            <div className="profileUsername">{data.getUser.username}</div>
+            <p className="profileBio">{data.getUser.bio}</p>
           </div>
         )}
       </div>
