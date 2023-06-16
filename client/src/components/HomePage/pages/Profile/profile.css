@@ -2,6 +2,7 @@
     text-align: center;
     width: 100%;
     font-size: 2rem;
+    font-weight: 600;
     padding-block: 1rem;
     color: var(--black);
     text-shadow: 0px 0px 10px #00000026;
@@ -24,7 +25,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* background: #272727; */
 }
 
 .profilePfp {
@@ -84,7 +84,6 @@
 .active {
     background-color: #be4c4c;
     transform: scale(1.1);
-    /* box-shadow: 0px 0px 15px 0px #d98282; */
 }
 
 .active:hover {

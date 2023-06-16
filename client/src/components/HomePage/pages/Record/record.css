@@ -2,6 +2,7 @@
     text-align: center;
     width: 100%;
     font-size: 2rem;
+    font-weight: 600;
     padding-block: 1rem;
     color: var(--black);
     border-bottom: solid rgba(255, 255, 255, 0.232) 1px;
@@ -90,7 +91,6 @@
     justify-content: center;
     box-shadow: 0px 0px 10px 10px #00000088;
     border-radius: 2rem;
-    /* transform: scale(2.0); */
     filter: invert(15%);
 
 }

@@ -48,7 +48,15 @@ const resolvers = {
         const user = await User.create({ username, email, password });
         const token = signToken(user);
         console.log(token);
-        return {user, token};
+        return {
+          token,
+          user: {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            comments: user.comments,
+          }
+        };
       } catch (error) {
         console.error(error);
         throw new Error("Failed to create user");
@@ -100,14 +108,7 @@ const resolvers = {
           bio:context.user.username,
         });
 
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { bio: bio._id } }
-          );
-          
-          console.log(context.user)
-        console.log(bio)
-        return bio;
+        await bio.save();
 
       }
       // throw new AuthenticationError("You need to be logged in!");
