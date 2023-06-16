@@ -1,14 +1,15 @@
 import React from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Switch } from 'react-router-dom';
 import { setContext } from '@apollo/client/link/context';
 import LandingPage from './components/LandingPage/LandingPage';
 import HomePage from './components/HomePage/HomePage';
 // import RecordingPage from './components/Record/Record';
 import EditProfile from './components/HomePage/pages/EditProfile/EditProfile';
+import Profile from './components/HomePage/pages/Profile/Profile';
 
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: 'http://localhost:3001/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -26,20 +27,19 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-function App() {
+const App = () => {
   return (
     <ApolloProvider client={client}>
-      <div className="App">
-        <Router>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/edit" element={<EditProfile />} />
-          </Routes>
-        </Router>
-      </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/edit" element={<EditProfile />} />
+        </Routes>
+      </Router>
     </ApolloProvider>
   );
-}
+};
 
 export default App;

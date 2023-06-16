@@ -122,7 +122,7 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
-    updateUser: async (_, { id, username, email }) => {
+    updateUser: async (_, { id, username, email, bio }) => {
       try {
         const user = await User.findByIdAndUpdate(
           id,

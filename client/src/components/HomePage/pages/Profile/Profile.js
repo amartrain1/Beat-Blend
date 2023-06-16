@@ -1,90 +1,47 @@
-import React, { useState, useEffect } from "react";
-import jwtDecode from "jwt-decode";
-import "./profile.css";
-import pfp from "../../../photos/pfp placeholder.png";
-import Posts from "./Posts/Posts";
-import MyRecordings from "./myRecordings/myRecordings";
+import React, { useEffect, useState } from 'react';
+import { useQuery, gql } from '@apollo/client';
 
+const GET_USER = gql`
+  query GetUser($userId: ID!) {
+    getUser(id: $userId) {
+      username
+      bio
+    }
+  }
+`;
 
 const Profile = () => {
-  const [botHalf, setBotHalf] = useState("Posts");
-  const [username, setUsername] = useState("");
-
-  const botHalfRender = () => {
-    if (botHalf === "Posts") {
-      return <Posts />;
-    }
-    if (botHalf === "myRecordings") {
-      return <MyRecordings />;
-    }
-
-  };
-
-  const handleBotHalfChange = (prop) => {
-    setBotHalf(prop);
-  };
+  const [userData, setUserData] = useState(null);
+  const { loading, error, data } = useQuery(GET_USER, {
+    variables: { userId: 'user-id-here' }, // Replace with the actual user ID
+  });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decodedToken = decodeToken(token);
-        if (decodedToken && decodedToken.username) {
-          const storedUsername = decodedToken.username;
-          setUsername(storedUsername);
-        } else {
-          console.error("Invalid token - Missing or invalid username");
-          localStorage.removeItem("token");
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error);
-        localStorage.removeItem("token"); 
-      }
+    if (!loading && data) {
+      setUserData(data.getUser);
     }
-  }, [])
+  }, [loading, data]);
 
-  const decodeToken = (token) => {
-    try {
-      return jwtDecode(token);
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      return null;
-    }
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
+  if (error) {
+    return <div>Error fetching user data</div>;
+  }
 
   return (
     <>
       <div className="profileHeader">Your Profile</div>
       <div className="mainProfileContainer">
-        <div className="userProfileInfo">
-          <img className="profilePfp" src={pfp}></img>
-          {/* <div className="profileName">FName LName</div> */}
-          <div className="profileUsername">{`@${username}`}</div>
-          <p className="profileBio">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </p>
-        </div>
-        <div className="profileButtons">
-          <div
-            className={botHalf === "Posts" ? "profileBtn active" : "profileBtn"}
-            onClick={() => handleBotHalfChange("Posts")}
-          >
-            Posts
+        {/* Render the user data */}
+        {userData && (
+          <div className="userProfileInfo">
+            <img className="profilePfp" src={userData.profilePicture}></img>
+            <div className="profileUsername">{userData.username}</div>
+            <p className="profileBio">{userData.bio}</p>
           </div>
-          <div
-            className={
-              botHalf === "myRecordings" ? "profileBtn active" : "profileBtn"
-            }
-            onClick={() => handleBotHalfChange("myRecordings")}
-          >
-            My Recordings
-          </div>
-        </div>
-        {botHalfRender()}
+        )}
       </div>
     </>
   );

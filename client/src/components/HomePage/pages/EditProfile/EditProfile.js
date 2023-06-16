@@ -42,7 +42,13 @@ const EditProfile = () => {
   const handleUpdate = async (event) => {
     event.preventDefault();
     try {
-      const response = await updateUser({ variables: { id, name, username, email, bio } });
+      const variables = { id };
+      if (name) variables.name = name;
+      if (username) variables.username = username;
+      if (email) variables.email = email;
+      if (bio) variables.bio = bio;
+
+      const response = await updateUser({ variables });
       console.log(response);
     } catch (e) {
       console.error(e);
