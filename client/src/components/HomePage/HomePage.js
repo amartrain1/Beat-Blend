@@ -1,19 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+//useRef hook added
 import HeaderNav from "../Header/HeaderNav";
 import "./homePage.css";
 import Feed from "./pages/Feed/Feed";
 import Profile from "./pages/Profile/Profile";
 import pfp from "../photos/pfp placeholder.png";
-import Notifications from "./pages/Notifications/Notifications"
+import Notifications from "./pages/Notifications/Notifications";
 import Posts from "./pages/Profile/Posts/Posts";
 import Recordings from "./pages/Profile/myRecordings/myRecordings";
-import Search from './pages/Search/Search'
+import Search from "./pages/Search/Search";
 import Favorites from "./pages/Favorites/Favorites";
 import Record from "./pages/Record/Record";
-import EditProfile from "./pages/EditProfile/EditProfile"
+import EditProfile from "./pages/EditProfile/EditProfile";
 
 const HomePage = () => {
   const [length, setLength] = useState(0);
+  //adds state variable to track the selected audio file
+  const [selectedAudio, setSelectedAudio] = useState(null);
+
   function countLength() {
     const textarea = document.getElementById("textInput");
     var string = textarea.value;
@@ -21,6 +25,7 @@ const HomePage = () => {
   }
 
   const [page, setPage] = useState("Feed");
+  const inputFileRef = useRef(null);
 
   const renderMiddle = () => {
     if (page === "Feed") {
@@ -29,42 +34,56 @@ const HomePage = () => {
     if (page === "Profile") {
       return <Profile />;
     }
-    if (page === 'Record') {
-      return <Record />
+    if (page === "Record") {
+      return <Record />;
     }
-    if (page === 'Favorites') {
-      return <Favorites />
+    if (page === "Favorites") {
+      return <Favorites />;
     }
-    if (page === 'Notifications') {
-      return <Notifications />
-    }
-
-    if (page === 'Recordings') {
-      return <Recordings username="@username" />
-    }
-    if (page === 'Posts') {
-      return <Posts username="@username" />
+    if (page === "Notifications") {
+      return <Notifications />;
     }
 
-    if (page === 'Search') {
-      return <Search />
+    if (page === "Recordings") {
+      return <Recordings username="@username" />;
     }
-    if (page === 'EditProfile') {
-      return <EditProfile />
+    if (page === "Posts") {
+      return <Posts username="@username" />;
     }
 
-
+    if (page === "Search") {
+      return <Search />;
+    }
+    if (page === "EditProfile") {
+      return <EditProfile />;
+    }
   };
 
   const handlePageChange = (pageName) => {
     setPage(pageName);
+  };
+//function to handle the upload of the selected audio file
+  const handleUploadAudio = () => {
+    inputFileRef.current.click();
+  };
+  const handleAudioSelection = (event) => {
+    //function to handle file selection
+    const file = event.target.files[0];
+    setSelectedAudio(file);
+  };
+
+  const handleAudioUpload = () => {
+    if (selectedAudio) {
+      // Perform the upload logic here
+      console.log("Uploading audio:", selectedAudio);
+    }
   };
 
   return (
     <>
       <HeaderNav />
       <div className="mainHomeContainer">
-          {/* LEFT NAVIGATION */}
+        {/* LEFT NAVIGATION */}
         <div className="leftContainer">
           {" "}
           <div className="navHeader">Navigation</div>
@@ -149,7 +168,6 @@ const HomePage = () => {
           {/* changing */}
           {renderMiddle()}
         </div>
-        {/* RIGHT CONTAINER */}
         <div className="rightContainer">
           <div className="newPostHeader">New Post</div>
           <div className="formContainer">
@@ -174,10 +192,27 @@ const HomePage = () => {
             </form>
             {/* UPLOAD CONTAINER */}
             <div className="uploadContainer">
-              <div className="upload postBtn">Upload Audio</div>
+              <div className="upload postBtn" onClick={handleUploadAudio}>
+                Upload Audio
+              </div>
+              <input
+              //reference to the input element allowing programmatic access
+              //inputFileRef = variable that was created using the 'useRef hook in React component, imported on line 1 from 'react'
+                ref={inputFileRef}
+                //sets input type to 'file'
+                type="file"
+                //audio/* means it accepts only audio files
+                accept="audio/*"
+                //sets display property of the input element to 'none'
+                style={{ display: "none" }}
+
+                onChange={handleAudioSelection}
+              />
               <div className="upload postBtn">Monetize?</div>
             </div>
-            <div className="post bigPostBtn">Post!</div>
+            <div className="post bigPostBtn" onClick={handleAudioUpload}>
+              Post!
+            </div>
           </div>
         </div>
       </div>

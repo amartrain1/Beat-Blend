@@ -1,137 +1,120 @@
-import React, { useState } from "react";
-import { useMutation, gql } from '@apollo/client';
-import "./editProfile.css";
-import pfp from "../../../photos/pfp placeholder.png";
+const { User, Comment, Bio } = require("../models");
+const { AuthenticationError } = require("apollo-server-express");
+const { signToken } = require("../utils/auth");
 
-const UPDATE_USER = gql`
-  mutation UpdateUser($id: ID!, $name: String!, $username: String!, $email: String!, $password: String!, $bio: String!) {
-    updateUser(id: $id, name: $name, username: $username, email: $email, password: $password, bio: $bio) {
-      id
-      name
-      username
-      email
-      password
-      bio
-    }
-  }
-`;
-
-const ADD_BIO = gql`
-  mutation AddBio($bioText: String!) {
-    addBio(bioText: $bioText) {
-      id
-      bioText
-    }
-  }
-`;
-
-const EditProfile = () => {
-  const [privateAcc, setPrivateAcc] = useState("Public");
-  const [length, setLength] = useState(0);
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [bio, setBio] = useState("");
-
-  const [updateUser, { error: errorUser }] = useMutation(UPDATE_USER);
-  const [addBio, { error: errorBio }] = useMutation(ADD_BIO);
-
-  const countLength = (e) => {
-    setLength(e.target.value.length);
-    setBio(e.target.value);
-  };
-
-  const handleSubmit = async () => {
-    try {
-      await updateUser({
-        variables: { id: user.id, name, username, email, password, bio },
-      });
-    } catch (error) {
-      console.error(error);
-
+const resolvers = {
+  Query: {
+    getUser: async (_, { id }) => {
       try {
-        await addBio({
-          variables: { bioText: bio },
-        });
+        const user = await User.findById(id);
+        return user;
       } catch (error) {
         console.error(error);
+        throw new Error("Failed to fetch user");
       }
-    }
-  };
+    },
+    getUsers: async () => {
+      try {
+        const users = await User.find({});
+        return users;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to fetch users");
+      }
+    },
+    getComment: async (_, { id }) => {
+      try {
+        const comment = await Comment.findById(id);
+        return comment;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to fetch user");
+      }
+    },
+    getComments: async () => {
+      try {
+        console.log("anything");
+        const comments = await Comment.find({});
+        return comments;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to fetch comments");
+      }
+    },
+  },
+  Mutation: {
+    createUser: async (_, { username, email, password }) => {
+      try {
+        const user = await User.create({ username, email, password });
+        return user;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to create user");
+      }
+    },
+    login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
 
-  return (
-    <>
-      <div className="settingsHeader">Edit Profile</div>
-      <div className="mainSettingsContainer">
-        <div className="pfpEdit">
-          <img className="settingsPfp" src={pfp}></img>
-          <button className="pfpChangeBtn">Update Image</button>
-          <div className="bioContainer">
-            <div className="settingLabel">Bio:</div>
-            <p>
-              <span className={length > 150 ? "red" : "green"}>{length}</span>
-              /150
-            </p>
-            <textarea
-              id="textInput"
-              className="bioInput"
-              type="text"
-              placeholder="Enter Bio (150 char max)"
-              onChange={countLength}
-              rows="3"
-            />
-          </div>
-        </div>
-        <div className="settings">
-          <div className="singleSetting">
-            <div className="settingLabel">Name:</div>
-            <input className="settingInput" placeholder="Enter a name" onChange={e => setName(e.target.value)} />
-          </div>
-          <div className="singleSetting">
-            <div className="settingLabel">Username:</div>
-            <input className="settingInput" placeholder="Enter a username" onChange={e => setUsername(e.target.value)} />
-          </div>
-          <div className="singleSetting">
-            <div className="settingLabel">Email:</div>
-            <input className="settingInput" placeholder="Enter a email" onChange={e => setEmail(e.target.value)} />
-          </div>
-          <div className="singleSetting">
-            <div className="settingLabel">Password:</div>
-            <input className="settingInput" placeholder="Enter a password" onChange={e => setPassword(e.target.value)} />
-          </div>
-          <div className="singleSetting">
-            <div className="settingLabel">Private Account:</div>
-            <div className="privateButtonsContainer">
-              <div className="privateButton">
-                <div
-                  className={
-                    privateAcc === "Public" ? "active privateBtn" : "privateBtn"
-                  }
-                  onClick={() => setPrivateAcc("Public")}
-                >
-                  Public
-                </div>
-              </div>
-              <div className="privateButton">
-                <div
-                  className={
-                    privateAcc === "Private"
-                      ? "active privateBtn"
-                      : "privateBtn"
-                  }
-                  onClick={() => setPrivateAcc("Private")}
-                >
-                  Private
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="saveBtn" onClick={handleSubmit}>Save</div>
-      </div>
-    </>
-  );
+      if (!user) {
+        throw new AuthenticationError("No user found with this email address");
+      }
+
+      const correctPw = await user.isCorrectPassword(password);
+
+      if (!correctPw) {
+        throw new AuthenticationError("Incorrect credentials");
+      }
+
+      const token = signToken(user);
+
+      return { token, user };
+    },
+    addComment: async (parent, { commentText }, context) => {
+      if (context.user) {
+        const comment = await Comment.create({
+          tCommentText,
+          CommentAuthor: context.user.username,
+        });
+
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { comments: comment._id } }
+        );
+
+        return comment;
+      }
+      // throw new AuthenticationError("You need to be logged in!");
+    },
+
+    addBio: async (_, { bioText }, context) => {
+      if (context.user) {
+        const comment = new Bio({
+          bioText,
+          bioAuthor: context.user.username,
+        });
+
+        await Bio.save();
+
+        return Bio;
+      }
+
+      // throw new AuthenticationError("You need to be logged in!");
+    },
+
+    updateUser: async (_, { id, username, email }) => {
+      try {
+        const user = await User.findByIdAndUpdate(
+          id,
+          { username, email },
+          { new: true }
+        );
+        return user;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to update user");
+      }
+    },
+  },
 };
 
-export default EditProfile;
+module.exports = resolvers;

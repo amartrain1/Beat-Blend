@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const LogInForm = ({ handleLogIn }) => {
+const LogInForm = ({ handleLogIn, error, setError }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -34,6 +34,7 @@ const LogInForm = ({ handleLogIn }) => {
         <button className="submit" type="submit">
           Log In
         </button>
+        {error && <p className="alertText"><i>{error}</i></p>}
       </form>
     </motion.div>
   );

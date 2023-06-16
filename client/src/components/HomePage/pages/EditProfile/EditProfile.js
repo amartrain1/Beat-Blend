@@ -1,86 +1,82 @@
-import React, { useEffect, useState } from "react";
-import { useMutation, gql } from '@apollo/client';
+import React, { useState, useRef } from "react";
+import jwtDecode from "jwt-decode";
 import "./editProfile.css";
 import pfp from "../../../photos/pfp placeholder.png";
-import jwtDecode from "jwt-decode";
-
-const UPDATE_USER = gql`
-  mutation UpdateUser($id: ID!, $name: String!, $username: String!, $email: String!, $password: String!, $bio: String!) {
-    updateUser(id: $id, name: $name, username: $username, email: $email, password: $password, bio: $bio) {
-      id
-      name
-      username
-      email
-      password
-      bio
-    }
-  }
-`;
-
-const ADD_BIO = gql`
-  mutation AddBio($bioText: String!) {
-    addBio(bioText: $bioText) {
-      id
-      bioText
-    }
-  }
-`;
+import { useMutation } from "@apollo/client";
+import { UPDATE_USER } from "../../../../utils/mutations";
 
 const EditProfile = () => {
-  const [privateAcc, setPrivateAcc] = useState("Public");
-  const [length, setLength] = useState(0);
+  const token = localStorage.getItem('id_token');
+  console.log(token);
+  let decoded, id;
+
+  if (token) {
+    try {
+      decoded = jwtDecode(token);
+      id = decoded.userID;
+    } catch (error) {
+      console.error('Invalid JWT', error);
+    }
+  } else {
+    console.error('No JWT found');
+  }
+
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [bio, setBio] = useState("");
-  const [user, setUser] = useState(null);
+  const [length, setLength] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [privateAcc, setPrivateAcc] = useState("Public");
+  const inputFileRef = useRef(null);
 
-  const [updateUser, { error: errorUser }] = useMutation(UPDATE_USER);
-  const [addBio, { error: errorBio }] = useMutation(ADD_BIO);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      getUserFromToken(decodedToken).then(setUser);
+  const [updateUser, { loading: updating, error: updateError }] = useMutation(UPDATE_USER, {
+    onCompleted: (data) => {
+      console.log("Update successful");
+    },
+    onError: (error) => {
+      console.log("Update error", error);
     }
-  }, []);
+  });
 
-  // You need to define this function to retrieve the user from the token
-  const getUserFromToken = async (token) => {
-    // Implementation here
-  };
-
-  const countLength = (e) => {
-    setLength(e.target.value.length);
-    setBio(e.target.value);
-  };
-
-  const handleSubmit = async () => {
+  const handleUpdate = async (event) => {
+    event.preventDefault();
     try {
-      await updateUser({
-        variables: { id: user.id, name, username, email, password, bio },
-      });
-    } catch (error) {
-      console.error(error);
-      try {
-        await addBio({
-          variables: { bioText: bio },
-        });
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await updateUser({ variables: { id, name, username, email, bio } });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
     }
   };
+
+  const handleImageSelection = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+  };
+
+  const countLength = (event) => {
+    setBio(event.target.value);
+    setLength(event.target.value.length);
+  }
 
   return (
     <>
       <div className="settingsHeader">Edit Profile</div>
       <div className="mainSettingsContainer">
-        <div className="pfpEdit">
-          <img className="settingsPfp" src={pfp}></img>
-          <button className="pfpChangeBtn">Update Image</button>
+        <form onSubmit={handleUpdate}>
+          <div className="pfpEdit">
+            <img
+              className="settingsPfp"
+              src={selectedImage ? URL.createObjectURL(selectedImage) : pfp}
+              alt="profile"
+            />
+            <button
+              className="pfpChangeBtn"
+              onClick={() => inputFileRef.current.click()}
+            >
+              Update Image
+            </button>
+          </div>
           <div className="bioContainer">
             <div className="settingLabel">Bio:</div>
             <p>
@@ -94,55 +90,53 @@ const EditProfile = () => {
               placeholder="Enter Bio (150 char max)"
               onChange={countLength}
               rows="3"
+              value={bio}
             />
           </div>
-        </div>
-        <div className="settings">
-          <div className="singleSetting">
-            <div className="settingLabel">Name:</div>
-            <input className="settingInput" placeholder="Enter a name" />
-          </div>
-          <div className="singleSetting">
-            <div className="settingLabel">Username:</div>
-            <input className="settingInput" placeholder="Enter a username" />
-          </div>
-          <div className="singleSetting">
-            <div className="settingLabel">Email:</div>
-            <input className="settingInput" placeholder="Enter a email" />
-          </div>
-          <div className="singleSetting">
-            <div className="settingLabel">Password:</div>
-            <input className="settingInput" placeholder="Enter a password" />
-          </div>
-          <div className="singleSetting">
-            <div className="settingLabel">Private Account:</div>
-            <div className="privateButtonsContainer">
-              <div className="privateButton">
-                <div
-                  className={
-                    privateAcc === "Public" ? "active privateBtn" : "privateBtn"
-                  }
-                  onClick={() => setPrivateAcc("Public")}
-                >
-                  Public
+          <div className="settings">
+            <div className="singleSetting">
+              <div className="settingLabel">Name:</div>
+              <input className="settingInput" placeholder="Enter a name" onChange={(event) => setName(event.target.value)} value={name} />
+            </div>
+            <div className="singleSetting">
+              <div className="settingLabel">Username:</div>
+              <input className="settingInput" placeholder="Enter a username" onChange={(event) => setUsername(event.target.value)} value={username} />
+            </div>
+            <div className="singleSetting">
+              <div className="settingLabel">Email:</div>
+              <input className="settingInput" placeholder="Enter an email" onChange={(event) => setEmail(event.target.value)} value={email} />
+            </div>
+            <div className="singleSetting">
+              <div className="settingLabel">Private Account:</div>
+              <div className="privateButtonsContainer">
+                <div className="privateButton">
+                  <div
+                    className={privateAcc === "Public" ? "active privateBtn" : "privateBtn"}
+                    onClick={() => setPrivateAcc("Public")}
+                  >
+                    Public
+                  </div>
                 </div>
-              </div>
-              <div className="privateButton">
-                <div
-                  className={
-                    privateAcc === "Private"
-                      ? "active privateBtn"
-                      : "privateBtn"
-                  }
-                  onClick={() => setPrivateAcc("Private")}
-                >
-                  Private
+                <div className="privateButton">
+                  <div
+                    className={privateAcc === "Private" ? "active privateBtn" : "privateBtn"}
+                    onClick={() => setPrivateAcc("Private")}
+                  >
+                    Private
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="saveBtn">Save</div>
+          <button type="submit" className="saveBtn">Save</button>
+        </form>
+        <input
+          ref={inputFileRef}
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleImageSelection}
+        />
       </div>
     </>
   );

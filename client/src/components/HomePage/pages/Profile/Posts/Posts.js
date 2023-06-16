@@ -18,6 +18,7 @@ const Posts = ({ username }) => {
       setLike(false);
     }
   };
+  
   return (
     <>
         <div className="feedElement">
