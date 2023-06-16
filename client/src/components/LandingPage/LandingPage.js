@@ -27,7 +27,7 @@ const LandingPage = () => {
       if (response.ok) {
         const { token } = await response.json();
         AuthService.login(token);
-        navigate("/home");
+        navigate("/edit");
       } else {
         const data = await response.json();
         console.error(data.message);
