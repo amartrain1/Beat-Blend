@@ -46,7 +46,9 @@ const resolvers = {
     createUser: async (_, { username, email, password }) => {
       try {
         const user = await User.create({ username, email, password });
-        return user;
+        const token = signToken(user);
+        console.log(token);
+        return {user, token};
       } catch (error) {
         console.error(error);
         throw new Error("Failed to create user");
@@ -70,25 +72,30 @@ const resolvers = {
       return { token, user };
     },
     addComment: async (parent, { commentText }, context) => {
+      console.log(context)
+      
       if (context.user) {
         const comment = await Comment.create({
-          tCommentText,
-          CommentAuthor: context.user.username,
+          commentText,
+          commentAuthor: context.user.username,
         });
 
         await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { comments: comment._id } }
-        );
-
+          );
+          
+          console.log(context.user)
+        console.log(comment)
         return comment;
+
       }
       // throw new AuthenticationError("You need to be logged in!");
     },
 
     addBio: async (_, { bioText }, context) => {
       if (context.user) {
-        const comment = new Bio({
+        const bio = new Bio({
           bioText,
           bioAuthor: context.user.username,
         });
@@ -105,7 +112,7 @@ const resolvers = {
       try {
         const user = await User.findByIdAndUpdate(
           id,
-          { username, email },
+          { username, email, bio },
           { new: true }
         );
         return user;
