@@ -30,6 +30,10 @@ export const ADD_COMMENT = gql`
   mutation Mutation($commentText: String!) {
     addComment(commentText: $commentText) {
       commentText
+    }
+  }
+`;
+
 
 export const UPDATE_USER = gql`
   mutation UpdateUser($id: ID!, $name: String, $username: String, $email: String, $bio: String) {
@@ -39,7 +43,6 @@ export const UPDATE_USER = gql`
       username
       email
       bio
-    }
     }
   }
 `;
