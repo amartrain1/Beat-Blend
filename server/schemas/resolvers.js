@@ -51,7 +51,7 @@ const resolvers = {
         return {
           token,
           user: {
-            id: user.id,
+            id: user._id,
             username: user.username,
             email: user.email,
             comments: user.comments,
@@ -100,17 +100,19 @@ const resolvers = {
       }
       // throw new AuthenticationError("You need to be logged in!");
     },
-    addBio: async (parent, { bio }, context) => {
+    addBio: async (parent, { bioText }, context) => {
       console.log(context)
       
       if (context.user) {
-        const bio = await User.create({
-          bio:context.user.username,
-        });
+        const user = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          {bio:bioText},
+          {new:true}
+        );
 
-        await bio.save();
-
+        return user;
       }
+
       // throw new AuthenticationError("You need to be logged in!");
     },
 

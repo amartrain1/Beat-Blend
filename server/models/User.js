@@ -28,8 +28,6 @@ const userSchema = new Schema({
     type: String,
     required: false,
     max: 150,
-    required: false,
-    max: 150
   },
   comments: [
     {
