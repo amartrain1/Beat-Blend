@@ -34,7 +34,7 @@ const typeDefs = gql`
     createUser(username: String!, email: String!, password: String!): Auth
     addComment(commentText: String!): Comment
     addBio(id:ID!, bioText: String!): ID
-    updateUser(id: ID!, username: String!, email: String!): User!
+    updateUser(id: ID!, name: String, username: String, email: String, bio: String): User!
     deleteUser(id: ID!): User!
     userName: String
   }

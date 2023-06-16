@@ -43,7 +43,7 @@ const LandingPage = () => {
       const { token } = data.createUser;
       console.log(token); //! REMOVE
       AuthService.login(token);
-      navigate("/edit");
+      navigate("/home");
     } catch (error) {
       console.error(error.message);
       setError(error.message);
