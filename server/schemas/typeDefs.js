@@ -6,8 +6,8 @@ const typeDefs = gql`
     username: String!
     email: String!
     password: String!
-    bio: String!
-    comments: [Comment]!
+    bio: String
+    comments: [Comment]
   }
   type Comment {
     _id: ID
