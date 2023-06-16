@@ -6,7 +6,7 @@ const typeDefs = gql`
     username: String!
     email: String!
     password: String!
-    bio:String!
+    bio: String!
     comments: [Comment]!
   }
   type Comment {
@@ -26,7 +26,6 @@ const typeDefs = gql`
     getUsers: [User!]!
     getComments: [Comment]
     getComment(id: ID): Comment
-    
   }
 
   type Mutation {

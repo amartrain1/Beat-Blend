@@ -24,15 +24,6 @@ export const ADD_USER = gql`
   }
 `;
 
-export const ADD_COMMENT = gql`
-  mutation Mutation($commentText: String!) {
-    addComment(commentText: $commentText) {
-      _id
-      commentText
-    }
-  }
-`;
-
 export const UPDATE_USER = gql`
   mutation UpdateUser($id: ID!, $name: String, $username: String, $email: String, $bio: String) {
     updateUser(id: $id, name: $name, username: $username, email: $email, bio: $bio) {
@@ -40,8 +31,22 @@ export const UPDATE_USER = gql`
       name
       username
       email
-      bio
     }
   }
 `;
 
+export const ADD_COMMENT = gql`
+  mutation Mutation($commentText: String!) {
+    addComment(commentText: $commentText) {
+      commentText
+    }
+  }
+`;
+
+
+export const UPDATE_BIO = gql`
+mutation AddBio($bioText: String!) {
+  addBio(bioText: $bioText) {
+    bio
+  }
+}`;
