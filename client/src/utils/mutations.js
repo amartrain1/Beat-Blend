@@ -44,3 +44,11 @@ export const UPDATE_USER = gql`
     }
   }
 `;
+
+
+export const UPDATE_BIO = gql`
+mutation AddBio($bioText: String!) {
+  addBio(bioText: $bioText) {
+    bio
+  }
+}`;
