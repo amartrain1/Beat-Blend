@@ -29,8 +29,9 @@ const typeDefs = gql`
   type Query {
     getUser(id: ID!): User!
     getUsers: [User!]!
-    getComments: [Comment]!
-    getComment(id: ID!): Comment
+    getComments: [Comment]
+    getComment(id: ID): Comment
+    
   }
 
   type Mutation {
