@@ -19,10 +19,15 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  bio:{
+  profilePic: {
     type: String,
-    required: true,
-    max: 150
+    require: false,
+    //do we need require?
+  },
+  bio: {
+    type: String,
+    required: false,
+    max: 150,
   },
   comments: [
     {
@@ -33,11 +38,10 @@ const userSchema = new Schema({
   posts: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Comment",
-      max:200
-    },
+      ref: "Post",
+      max: 200,
+    }
   ],
-  
 });
 
 userSchema.pre("save", async function (next) {

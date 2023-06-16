@@ -6,18 +6,13 @@ const typeDefs = gql`
     username: String!
     email: String!
     password: String!
+    bio:String!
     comments: [Comment]!
   }
   type Comment {
     _id: ID
     commentText: String
     commentAuthor: String
-    createdAt: String
-  }
-  type Bio {
-    _id: ID
-    bioText: String
-    user: [User]!
     createdAt: String
   }
 
@@ -38,7 +33,7 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     createUser(username: String!, email: String!, password: String!): Auth
     addComment(commentText: String!): Comment
-    addBio(bioText: String!): Bio
+    addBio(id:ID!, bioText: String!): ID
     updateUser(id: ID!, username: String!, email: String!): User!
     deleteUser(id: ID!): User!
     userName: String

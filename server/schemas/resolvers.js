@@ -1,4 +1,4 @@
-const { User, Comment, Bio } = require("../models");
+const { User, Comment } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
 
@@ -92,21 +92,27 @@ const resolvers = {
       }
       // throw new AuthenticationError("You need to be logged in!");
     },
-
-    addBio: async (_, { bioText }, context) => {
+    addBio: async (parent, { bio }, context) => {
+      console.log(context)
+      
       if (context.user) {
-        const bio = new Bio({
-          bioText,
-          bioAuthor: context.user.username,
+        const bio = await User.create({
+          bio:context.user.username,
         });
 
-        await Bio.save();
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { bio: bio._id } }
+          );
+          
+          console.log(context.user)
+        console.log(bio)
+        return bio;
 
-        return Bio;
       }
-
       // throw new AuthenticationError("You need to be logged in!");
     },
+
 
     updateUser: async (_, { id, username, email }) => {
       try {
