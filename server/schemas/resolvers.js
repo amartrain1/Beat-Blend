@@ -6,7 +6,9 @@ const resolvers = {
   Query: {
     getUser: async (_, { id }) => {
       try {
+        console.log("getUser resolver - received id:", id); //! REMOVE
         const user = await User.findById(id);
+        console.log("getUser resolver - found user:", user); //! REMOVE
         return user;
       } catch (error) {
         console.error(error);
