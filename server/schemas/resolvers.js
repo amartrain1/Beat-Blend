@@ -55,7 +55,7 @@ const resolvers = {
             username: user.username,
             email: user.email,
             comments: user.comments,
-          }
+          },
         };
       } catch (error) {
         console.error(error);
@@ -80,8 +80,8 @@ const resolvers = {
       return { token, user };
     },
     addComment: async (parent, { commentText }, context) => {
-      console.log(context)
-      
+      console.log(context);
+
       if (context.user) {
         const comment = await Comment.create({
           commentText,
@@ -91,31 +91,29 @@ const resolvers = {
         await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { comments: comment._id } }
-          );
-          
-          console.log(context.user)
-        console.log(comment)
-        return comment;
+        );
 
+        console.log(context.user);
+        console.log(comment);
+        return comment;
       }
       // throw new AuthenticationError("You need to be logged in!");
     },
     addBio: async (parent, { bioText }, context) => {
-      console.log(context)
-      
+      console.log(context);
+
       if (context.user) {
         const bio = await User.create({
-          bio:context.user.username,
+          bio: context.user.username,
         });
-
 
         await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { bio: bio._id } }
-          );
-          
-          console.log(context.user)
-        console.log(bio)
+        );
+
+        console.log(context.user);
+        console.log(bio);
         return bio;
 
         return user;
@@ -123,7 +121,6 @@ const resolvers = {
 
       // throw new AuthenticationError("You need to be logged in!");
     },
-
 
     updateUser: async (_, { id, username, email }) => {
       try {
