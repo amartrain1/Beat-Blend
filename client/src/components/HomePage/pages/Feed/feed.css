@@ -2,6 +2,7 @@
   text-align: center;
   width: 100%;
   font-size: 2rem;
+  font-weight: 600;
   padding-block: 1rem;
   color: var(--black);
   border-bottom: solid rgba(255, 255, 255, 0.232) 1px;

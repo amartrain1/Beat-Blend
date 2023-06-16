@@ -25,7 +25,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
- const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (token) {
       try {
         const decodedToken = decodeToken(token);
@@ -34,12 +34,14 @@ const Profile = () => {
           setUsername(storedUsername);
         } else {
           console.error("Invalid token - Missing or invalid username");
+          localStorage.removeItem("token");
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        localStorage.removeItem("token"); 
       }
-    } catch (error) {
-      console.error("Error decoding token:", error);
     }
-  }
-  }, []);
+  }, [])
 
   const decodeToken = (token) => {
     try {

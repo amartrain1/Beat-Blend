@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from '@apollo/client';
+import gql from 'graphql-tag';
 import LogInForm from "./LogInForm/LogInForm";
 import SignUpForm from "./SignUpForm/SignUpForm";
 import "./landing.css";
@@ -7,64 +9,57 @@ import { AnimatePresence } from "framer-motion";
 import logo from '../photos/beat_blend_logo_1_transparent.png'
 import AuthService from "../../utils/auth";
 
+
+// GraphQL mutations
+const SIGNUP_MUTATION = gql`
+mutation Mutation($username: String!, $email: String!, $password: String!) {
+  createUser(username: $username, email: $email, password: $password) {
+    token
+  }
+}
+`;
+
+const LOGIN_MUTATION = gql`
+mutation Mutation($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    token
+  }
+}
+`;
+
 const LandingPage = () => {
   const [signUp, setSignUp] = useState(true);
   const navigate = useNavigate();
 
   const [error, setError] = useState(false);
 
+  const [signUpMutation] = useMutation(SIGNUP_MUTATION);
+  const [logInMutation] = useMutation(LOGIN_MUTATION);
+
   const handleSignUp = async (formData) => {
+    console.log(formData); //! REMOVE
     try {
-      const token = localStorage.getItem("token");
-
-      const response = await fetch("http://localhost:3001/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const { token } = await response.json();
-        AuthService.login(token);
-        navigate("/home");
-      } else {
-        const data = await response.json();
-        console.error(data.message);
-        setError(data.message)
-      }
+      const { data } = await signUpMutation({ variables: formData });
+      const { token } = data.createUser;
+      console.log(token); //! REMOVE
+      AuthService.login(token);
+      navigate("/edit");
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
+      setError(error.message);
     }
   };
 
   const handleLogIn = async (formData) => {
-    console.log(formData); //! REMOVE
     try {
-      const response = await fetch("http://localhost:3001/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log("Response data:", responseData); //! REMOVE
-        const { token } = responseData;
-        localStorage.setItem("token", token);
-        AuthService.login(token);
-        navigate("/home");
-      } else {
-        const data = await response.json();
-        console.error(data.message);
-        setError('Username or password is incorrect')
-      }
+      const { data } = await logInMutation({ variables: formData });
+      const { token } = data.logIn.token;
+      localStorage.setItem("token", token);
+      AuthService.login(token);
+      navigate("/home");
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
+      setError('Username or password is incorrect')
     }
   };
 
@@ -104,9 +99,9 @@ const LandingPage = () => {
         </div>
         <AnimatePresence>
           {signUp ? (
-            <SignUpForm handleSignUp={handleSignUp} error={error} setError={setError}/>
+            <SignUpForm handleSignUp={handleSignUp} error={error} setError={setError} />
           ) : (
-            <LogInForm handleLogIn={handleLogIn} error={error} setError={setError}/>
+            <LogInForm handleLogIn={handleLogIn} error={error} setError={setError} />
           )}
         </AnimatePresence>
       </div>
