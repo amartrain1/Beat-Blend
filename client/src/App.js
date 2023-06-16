@@ -8,7 +8,7 @@ import HomePage from './components/HomePage/HomePage';
 import EditProfile from './components/HomePage/pages/EditProfile/EditProfile';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3001e/graphql',
+  uri: '/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {

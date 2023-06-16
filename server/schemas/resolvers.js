@@ -48,7 +48,15 @@ const resolvers = {
         const user = await User.create({ username, email, password });
         const token = signToken(user);
         console.log(token);
-        return {user, token};
+        return {
+          token,
+          user: {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            comments: user.comments,
+          }
+        };
       } catch (error) {
         console.error(error);
         throw new Error("Failed to create user");
@@ -100,7 +108,7 @@ const resolvers = {
           bioAuthor: context.user.username,
         });
 
-        await Bio.save();
+        await bio.save();
 
         return Bio;
       }

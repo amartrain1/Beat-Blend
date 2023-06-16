@@ -12,19 +12,19 @@ import AuthService from "../../utils/auth";
 
 // GraphQL mutations
 const SIGNUP_MUTATION = gql`
-  mutation SignUp($username: String!, $email: String!, $password: String!) {
-    signUp(username: $username, email: $email, password: $password) {
-      token
-    }
+mutation Mutation($username: String!, $email: String!, $password: String!) {
+  createUser(username: $username, email: $email, password: $password) {
+    token
   }
+}
 `;
 
 const LOGIN_MUTATION = gql`
-  mutation LogIn($username: String!, $password: String!) {
-    logIn(username: $username, password: $password) {
-      token
-    }
+mutation Mutation($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    token
   }
+}
 `;
 
 const LandingPage = () => {
@@ -37,21 +37,23 @@ const LandingPage = () => {
   const [logInMutation] = useMutation(LOGIN_MUTATION);
 
   const handleSignUp = async (formData) => {
+    console.log(formData); //! REMOVE
     try {
       const { data } = await signUpMutation({ variables: formData });
-      const { token } = data.signUp;
+      const { token } = data.createUser;
+      console.log(token); //! REMOVE
       AuthService.login(token);
       navigate("/edit");
     } catch (error) {
       console.error(error.message);
-      setError(error.message)
+      setError(error.message);
     }
   };
 
   const handleLogIn = async (formData) => {
     try {
       const { data } = await logInMutation({ variables: formData });
-      const { token } = data.logIn;
+      const { token } = data.logIn.token;
       localStorage.setItem("token", token);
       AuthService.login(token);
       navigate("/home");
