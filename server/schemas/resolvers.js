@@ -104,11 +104,19 @@ const resolvers = {
       console.log(context)
       
       if (context.user) {
-        const user = await User.findOneAndUpdate(
+        const bio = await User.create({
+          bio:context.user.username,
+        });
+
+
+        await User.findOneAndUpdate(
           { _id: context.user._id },
-          {bio:bioText},
-          {new:true}
-        );
+          { $addToSet: { bio: bio._id } }
+          );
+          
+          console.log(context.user)
+        console.log(bio)
+        return bio;
 
         return user;
       }
