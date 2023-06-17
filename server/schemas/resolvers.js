@@ -1,4 +1,4 @@
-const { User, Comment } = require("../models");
+const { User, Comment, Post } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
 const resolvers = {
@@ -40,6 +40,24 @@ const resolvers = {
         throw new Error("Failed to fetch comments");
       }
     },
+    getPost: async (_, { id }) => {
+      try {
+        const post = await Post.findById(id);
+        return post;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to fetch user");
+      }
+    },
+    getPosts: async () => {
+      try {
+        const posts = await Post.find({});
+        return posts;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to fetch posts");
+      }
+    }
   },
   Mutation: {
     createUser: async (_, { username, email, password }) => {
@@ -118,6 +136,23 @@ const resolvers = {
         throw new Error("Failed to update user");
       }
     },
+    addPost: async (parent, { postText, postAudio }, context) => {
+      console.log(context)
+      if (context.user) {
+        const post = await Post.create({
+          postText,
+          postAudio,
+          postAuthor: context.user.username,
+        });
+
+        await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { posts: post._id } }
+        )
+        return post;
+      }
+    },
   },
 };
+
 module.exports = resolvers;
