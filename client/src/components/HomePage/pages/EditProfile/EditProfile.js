@@ -1,60 +1,62 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import jwtDecode from "jwt-decode";
 import "./editProfile.css";
 import pfp from "../../../photos/pfp placeholder.png";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_USER } from "../../../../utils/mutations";
+import { GET_USER } from "../../../../utils/queries";
 
 const EditProfile = () => {
   const token = localStorage.getItem("id_token");
-  console.log(token);
-  let decoded, id;
+  const decodedToken = jwtDecode(token);
+  const userId = decodedToken.data._id;
 
-  if (token) {
-    try {
-      decoded = jwtDecode(token);
-      id = decoded.userID;
-    } catch (error) {
-      console.error("Invalid JWT", error);
-    }
-  } else {
-    console.error("No JWT found");
-  }
-
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [bio, setBio] = useState("");
-  const [length, setLength] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
   const [privateAcc, setPrivateAcc] = useState("Public");
   const inputFileRef = useRef(null);
 
-  const [updateUser, { loading: updating, error: updateError }] = useMutation(
-    UPDATE_USER,
-    {
-      onCompleted: (data) => {
-        console.log("Update successful");
-      },
-      onError: (error) => {
-        console.log("Update error", error);
-      },
-    }
+  const { data, loading, error } = useQuery(GET_USER, {
+    variables: {
+      userId: userId,
+    },
+  });
+
+  const [formState, setFormState] = useState({
+    name: "",
+    username: "",
+    email: "",
+    bio: "",
+  });
+
+  const [updateUser, { loading: updateLoading, error: updateError }] = useMutation(
+    UPDATE_USER
   );
 
-  const handleUpdate = async (event) => {
+  useEffect(() => {
+    if (data && data.getUser) {
+      setFormState({
+        name: data.getUser.name,
+        username: data.getUser.username,
+        email: data.getUser.email,
+        bio: data.getUser.bio,
+      });
+    }
+  }, [data]);
+
+  const handleUpdate = async (event, context) => {
     event.preventDefault();
     try {
-      const variables = { id };
-      if (name) variables.name = name;
-      if (username) variables.username = username;
-      if (email) variables.email = email;
-      if (bio) variables.bio = bio;
-
-      const response = await updateUser({ variables });
-      console.log(response);
-    } catch (e) {
-      console.error(e);
+      await updateUser({
+        variables: {
+          id: userId,
+          name: formState.name,
+          username: formState.username,
+          email: formState.email,
+          bio: formState.bio,
+        }
+      });
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -63,16 +65,25 @@ const EditProfile = () => {
     setSelectedImage(file);
   };
 
+  const [length, setLength] = useState(0);
   const countLength = (event) => {
-    setBio(event.target.value);
     setLength(event.target.value.length);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    console.error(error);
+    return <div>Error!</div>;
+  }
 
   return (
     <>
       <div className="settingsHeader">Edit Profile</div>
       <div className="mainSettingsContainer">
-        <form onSubmit={handleUpdate}>
+        <form onSubmit={(e) => handleUpdate(e)}>
           <div className="pfpEdit">
             <img
               className="settingsPfp"
@@ -85,22 +96,25 @@ const EditProfile = () => {
             >
               Update Image
             </button>
-          <div className="bioContainer">
-            <div className="settingLabel">Bio:</div>
-            <p>
-              <span className={length > 150 ? "red" : "green"}>{length}</span>
-              /150
-            </p>
-            <textarea
-              id="textInput"
-              className="bioInput"
-              type="text"
-              placeholder="Enter Bio (150 char max)"
-              onChange={countLength}
-              rows="3"
-              value={bio}
-            />
-          </div>
+            <div className="bioContainer">
+              <div className="settingLabel">Bio:</div>
+              <p>
+                <span className={length > 150 ? "red" : "green"}>{length}</span>
+                /150
+              </p>
+              <textarea
+                id="textInput1"
+                className="bioInput"
+                type="text"
+                placeholder="Enter Bio (150 char max)"
+                onChange={(e) => {
+                  setFormState({ ...formState, bio: e.target.value });
+                  countLength(e);
+                }}
+                rows="3"
+                value={formState.bio}
+              />
+            </div>
           </div>
           <div className="settings">
             <div className="singleSetting">
@@ -108,8 +122,10 @@ const EditProfile = () => {
               <input
                 className="settingInput"
                 placeholder="Enter a name"
-                onChange={(event) => setName(event.target.value)}
-                value={name}
+                onChange={(e) =>
+                  setFormState({ ...formState, name: e.target.value })
+                }
+                value={formState.name}
               />
             </div>
             <div className="singleSetting">
@@ -117,8 +133,10 @@ const EditProfile = () => {
               <input
                 className="settingInput"
                 placeholder="Enter a username"
-                onChange={(event) => setUsername(event.target.value)}
-                value={username}
+                onChange={(e) =>
+                  setFormState({ ...formState, username: e.target.value })
+                }
+                value={formState.username}
               />
             </div>
             <div className="singleSetting">
@@ -126,8 +144,10 @@ const EditProfile = () => {
               <input
                 className="settingInput"
                 placeholder="Enter an email"
-                onChange={(event) => setEmail(event.target.value)}
-                value={email}
+                onChange={(e) =>
+                  setFormState({ ...formState, email: e.target.value })
+                }
+                value={formState.email}
               />
             </div>
             <div className="singleSetting">
@@ -175,5 +195,4 @@ const EditProfile = () => {
     </>
   );
 };
-
 export default EditProfile;

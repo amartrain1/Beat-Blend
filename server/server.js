@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/graphql', (req, res, next) => {
-  console.log(req.body);
+  console.log(req.body); //! this is logging the request body so that we can see what data is being passed to graphql
   next();
 });
 
