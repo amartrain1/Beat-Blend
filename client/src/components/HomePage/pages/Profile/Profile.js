@@ -5,7 +5,7 @@ import "./profile.css";
 import pfp from "../../../photos/pfp placeholder.png";
 import Posts from "./Posts/Posts";
 import MyRecordings from "./myRecordings/myRecordings";
-import { GET_USER } from "../../../../utils/mutations";
+import { GET_USER } from "../../../../utils/queries";
 
 const Profile = () => {
   const token = localStorage.getItem("id_token");
@@ -59,7 +59,7 @@ const Profile = () => {
           {/* Render the user data */}
           <div className="userProfileInfo">
             <img className="profilePfp" src={pfp}></img>
-            <div className="profileName">FName LName</div>
+            <div className="profileName">{data.getUser.name}</div>
             <div className="profileUsername">{`@${data.getUser.username}`}</div>
             <p className="profileBio">{data.getUser.bio}</p>
           </div>

@@ -31,6 +31,7 @@ export const UPDATE_USER = gql`
       name
       username
       email
+      bio
     }
   }
 `;

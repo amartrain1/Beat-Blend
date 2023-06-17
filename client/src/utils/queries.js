@@ -3,15 +3,17 @@ import { gql } from '@apollo/client'
 //this will find the user/comments/any query based on typedef using graphQL syntax
 
 export const GET_USER = gql`
-query Query {
-  getUsers {
-    username
-    password
-    id
-    email
+  query GetUser($userId: ID!) {
+    getUser(id: $userId) {
+      name
+      username
+      password
+      id
+      email
+      bio
+    }
   }
-}
-`
+`;
 
 
 export const QUERY_ME = gql`
