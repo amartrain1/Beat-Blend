@@ -53,8 +53,8 @@ const LandingPage = () => {
   const handleLogIn = async (formData) => {
     try {
       const { data } = await logInMutation({ variables: formData });
-      const { token } = data.logIn.token;
-      localStorage.setItem("token", token);
+      const { token } = data.login;
+      localStorage.setItem("id_token", token);
       AuthService.login(token);
       navigate("/home");
     } catch (error) {

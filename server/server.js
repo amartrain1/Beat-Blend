@@ -28,6 +28,11 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
+app.use('/graphql', (req, res, next) => {
+  console.log(req.body);
+  next();
+});
+
 const startApolloServer = async () => {
   await server.start();
   server.applyMiddleware({ app });
