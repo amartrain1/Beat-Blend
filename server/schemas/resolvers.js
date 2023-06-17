@@ -108,7 +108,7 @@ const resolvers = {
         console.log("Updated values:", name, username, email, bio); //! REMOVE
         const user = await User.findByIdAndUpdate(
           id,
-          { username, email, bio },
+          { name, username, email, bio },
           { new: true }
         );
         console.log("Updated user:", user); //! REMOVE
