@@ -2,11 +2,13 @@ import React, { useState, useRef } from "react";
 import jwtDecode from "jwt-decode";
 import "./editProfile.css";
 import pfp from "../../../photos/pfp placeholder.png";
-import { useMutation } from "@apollo/client";
-import { UPDATE_USER } from "../../../../utils/mutations";
+import { useMutation, useQuery, gql } from "@apollo/client";
+import { UPDATE_USER, GET_USER } from "../../../../utils/mutations";
 
 const EditProfile = () => {
   const token = localStorage.getItem("id_token");
+  const decodedToken = jwtDecode(token);
+  const userId = decodedToken.data._id;
   console.log(token);
   let decoded, id;
 
@@ -21,10 +23,18 @@ const EditProfile = () => {
     console.error("No JWT found");
   }
 
+  const { data, loading, error } = useQuery(GET_USER, {
+    variables: {
+      userId: userId,
+    },
+  });
+
+  
+
   const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [bio, setBio] = useState("");
+  const [username, setUsername] = useState(data.getUser.username);
+  const [email, setEmail] = useState(data.getUser.email);
+  const [bio, setBio] = useState(data.getUser.bio);
   const [length, setLength] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
   const [privateAcc, setPrivateAcc] = useState("Public");
