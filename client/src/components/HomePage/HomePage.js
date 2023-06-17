@@ -37,9 +37,9 @@ const HomePage = () => {
     if (page === "Record") {
       return <Record />;
     }
-    if (page === "Favorites") {
-      return <Favorites />;
-    }
+    // if (page === "Favorites") {
+    //   return <Favorites />;
+    // }
     if (page === "Notifications") {
       return <Notifications />;
     }
@@ -118,7 +118,7 @@ const HomePage = () => {
                 <div className="navLink">Record</div>
               </div>
             </li>
-            <li className="listEle">
+            {/* <li className="listEle">
               <div
                 onClick={() => handlePageChange("Favorites")}
                 className={
@@ -127,7 +127,7 @@ const HomePage = () => {
               >
                 <div className="navLink">Favorites</div>
               </div>
-            </li>
+            </li> */}
             <li className="listEle">
               <div
                 onClick={() => handlePageChange("Notifications")}
