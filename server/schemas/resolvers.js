@@ -1,14 +1,11 @@
 const { User, Comment } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
-
 const resolvers = {
   Query: {
     getUser: async (_, { id }) => {
       try {
-        console.log("getUser resolver - received id:", id); //! REMOVE
         const user = await User.findById(id);
-        console.log("getUser resolver - found user:", user); //! REMOVE
         return user;
       } catch (error) {
         console.error(error);
@@ -66,35 +63,27 @@ const resolvers = {
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
-
       if (!user) {
         throw new AuthenticationError("No user found with this email address");
       }
-
       const correctPw = await user.isCorrectPassword(password);
-
       if (!correctPw) {
         throw new AuthenticationError("Incorrect credentials");
       }
-
       const token = signToken(user);
-
       return { token, user };
     },
     addComment: async (parent, { commentText }, context) => {
       console.log(context);
-
       if (context.user) {
         const comment = await Comment.create({
           commentText,
           commentAuthor: context.user.username,
         });
-
         await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { comments: comment._id } }
         );
-
         console.log(context.user);
         console.log(comment);
         return comment;
@@ -103,28 +92,17 @@ const resolvers = {
     },
     addBio: async (parent, { bioText }, context) => {
       console.log(context);
-
       if (context.user) {
-        const bio = await User.create({
-          bio: context.user.username,
-        });
-
-        await User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { bio: bio._id } }
+          { bio: bioText },
+          { new: true }
         );
-
-        console.log(context.user);
-        console.log(bio);
-        return bio;
-
         return user;
       }
-
       // throw new AuthenticationError("You need to be logged in!");
     },
-
-    updateUser: async (_, { id, username, email, bio }) => {
+    updateUser: async (_, { id, username, email }) => {
       try {
         const user = await User.findByIdAndUpdate(
           id,
@@ -139,5 +117,4 @@ const resolvers = {
     },
   },
 };
-
 module.exports = resolvers;

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery, gql } from '@apollo/client';
-import jwtDecode from 'jwt-decode';
-import './profile.css';
-import pfp from '../../../photos/pfp placeholder.png';
-import Posts from './Posts/Posts';
-import MyRecordings from './myRecordings/myRecordings';
+import React, { useEffect, useState } from "react";
+import { useQuery, gql } from "@apollo/client";
+import jwtDecode from "jwt-decode";
+import "./profile.css";
+import pfp from "../../../photos/pfp placeholder.png";
+import Posts from "./Posts/Posts";
+import MyRecordings from "./myRecordings/myRecordings";
 
 const GET_USER = gql`
   query GetUser($userId: ID!) {
@@ -16,7 +16,7 @@ const GET_USER = gql`
 `;
 
 const Profile = () => {
-  const token = localStorage.getItem('id_token');
+  const token = localStorage.getItem("id_token");
   const decodedToken = jwtDecode(token);
   const userId = decodedToken.data._id;
   console.log("userId:", userId);
@@ -30,7 +30,6 @@ const Profile = () => {
     if (botHalf === "myRecordings") {
       return <MyRecordings />;
     }
-
   };
 
   const handleBotHalfChange = (prop) => {
@@ -60,30 +59,40 @@ const Profile = () => {
     return <div>Error: {error.message}</div>;
   }
 
-
-  // <div className="userProfileInfo">
-  //           <img className="profilePfp" src={data.getUser.profilePicture} alt="Profile Picture" />
-  //           <div className="profileUsername">{data.getUser.username}</div>
-  //           <p className="profileBio">{data.getUser.bio}</p>
-  //         </div>
   return (
     <>
       <div className="profileHeader">Your Profile</div>
-      <div className="mainProfileContainer">
-        {/* Render the user data */}
-        {data && data.getUser && (
-            <div className="userProfileInfo">
-              <img className="profilePfp" src={pfp}></img>
-              {/* <div className="profileName">FName LName</div> */}
-              <div className="profileUsername">{`@${data.getUser.username}`}</div>
-              <p className="profileBio">
-                {data.getUser.bio}
-              </p>
+      {data && data.getUser && (
+        <div className="mainProfileContainer">
+          {/* Render the user data */}
+          <div className="userProfileInfo">
+            <img className="profilePfp" src={pfp}></img>
+            <div className="profileName">FName LName</div>
+            <div className="profileUsername">{`@${data.getUser.username}`}</div>
+            <p className="profileBio">{data.getUser.bio}</p>
+          </div>
+          <div className="profileButtons">
+            <div
+              className={
+                botHalf === "Posts" ? "profileBtn active" : "profileBtn"
+              }
+              onClick={() => handleBotHalfChange("Posts")}
+            >
+              Posts
             </div>
-        )}
-      </div>
+            <div
+              className={
+                botHalf === "myRecordings" ? "profileBtn active" : "profileBtn"
+              }
+              onClick={() => handleBotHalfChange("myRecordings")}
+            >
+              My Recordings
+            </div>
+          </div>
+          {botHalfRender()}
+        </div>
+      )}
     </>
-    
   );
 };
 
