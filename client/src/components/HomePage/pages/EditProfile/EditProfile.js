@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_USER } from "../../../../utils/mutations";
 
 const EditProfile = () => {
-  const token = localStorage.getItem('id_token');
+  const token = localStorage.getItem("id_token");
   console.log(token);
   let decoded, id;
 
@@ -15,10 +15,10 @@ const EditProfile = () => {
       decoded = jwtDecode(token);
       id = decoded.userID;
     } catch (error) {
-      console.error('Invalid JWT', error);
+      console.error("Invalid JWT", error);
     }
   } else {
-    console.error('No JWT found');
+    console.error("No JWT found");
   }
 
   const [name, setName] = useState("");
@@ -30,14 +30,17 @@ const EditProfile = () => {
   const [privateAcc, setPrivateAcc] = useState("Public");
   const inputFileRef = useRef(null);
 
-  const [updateUser, { loading: updating, error: updateError }] = useMutation(UPDATE_USER, {
-    onCompleted: (data) => {
-      console.log("Update successful");
-    },
-    onError: (error) => {
-      console.log("Update error", error);
+  const [updateUser, { loading: updating, error: updateError }] = useMutation(
+    UPDATE_USER,
+    {
+      onCompleted: (data) => {
+        console.log("Update successful");
+      },
+      onError: (error) => {
+        console.log("Update error", error);
+      },
     }
-  });
+  );
 
   const handleUpdate = async (event) => {
     event.preventDefault();
@@ -63,7 +66,7 @@ const EditProfile = () => {
   const countLength = (event) => {
     setBio(event.target.value);
     setLength(event.target.value.length);
-  }
+  };
 
   return (
     <>
@@ -82,7 +85,6 @@ const EditProfile = () => {
             >
               Update Image
             </button>
-          </div>
           <div className="bioContainer">
             <div className="settingLabel">Bio:</div>
             <p>
@@ -99,25 +101,45 @@ const EditProfile = () => {
               value={bio}
             />
           </div>
+          </div>
           <div className="settings">
             <div className="singleSetting">
               <div className="settingLabel">Name:</div>
-              <input className="settingInput" placeholder="Enter a name" onChange={(event) => setName(event.target.value)} value={name} />
+              <input
+                className="settingInput"
+                placeholder="Enter a name"
+                onChange={(event) => setName(event.target.value)}
+                value={name}
+              />
             </div>
             <div className="singleSetting">
               <div className="settingLabel">Username:</div>
-              <input className="settingInput" placeholder="Enter a username" onChange={(event) => setUsername(event.target.value)} value={username} />
+              <input
+                className="settingInput"
+                placeholder="Enter a username"
+                onChange={(event) => setUsername(event.target.value)}
+                value={username}
+              />
             </div>
             <div className="singleSetting">
               <div className="settingLabel">Email:</div>
-              <input className="settingInput" placeholder="Enter an email" onChange={(event) => setEmail(event.target.value)} value={email} />
+              <input
+                className="settingInput"
+                placeholder="Enter an email"
+                onChange={(event) => setEmail(event.target.value)}
+                value={email}
+              />
             </div>
             <div className="singleSetting">
               <div className="settingLabel">Private Account:</div>
               <div className="privateButtonsContainer">
                 <div className="privateButton">
                   <div
-                    className={privateAcc === "Public" ? "active privateBtn" : "privateBtn"}
+                    className={
+                      privateAcc === "Public"
+                        ? "active privateBtn"
+                        : "privateBtn"
+                    }
                     onClick={() => setPrivateAcc("Public")}
                   >
                     Public
@@ -125,7 +147,11 @@ const EditProfile = () => {
                 </div>
                 <div className="privateButton">
                   <div
-                    className={privateAcc === "Private" ? "active privateBtn" : "privateBtn"}
+                    className={
+                      privateAcc === "Private"
+                        ? "active privateBtn"
+                        : "privateBtn"
+                    }
                     onClick={() => setPrivateAcc("Private")}
                   >
                     Private
@@ -133,8 +159,10 @@ const EditProfile = () => {
                 </div>
               </div>
             </div>
+            <button type="submit" className="saveBtn">
+              Save
+            </button>
           </div>
-          <button type="submit" className="saveBtn">Save</button>
         </form>
         <input
           ref={inputFileRef}

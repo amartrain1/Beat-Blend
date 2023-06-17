@@ -13,7 +13,7 @@
 .mainSettingsContainer {
   border-right: solid rgba(255, 255, 255, 0.232) 1px;
   border-left: solid rgba(255, 255, 255, 0.232) 1px;
-  height: 84vh;
+  height: 84.5vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -25,7 +25,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  margin: 1rem;
   padding-bottom: 2rem;
   border-bottom: solid rgba(255, 255, 255, 0.232) 1px;
 }
@@ -51,8 +51,7 @@
 }
 
 .pfpChangeBtn:hover {
-  transform: scale(1.1)
-  /* box-shadow: 0px 0px 30px 0px #00000088; */
+  transform: scale(1.1);
 }
 
 .bioContainer {
@@ -60,7 +59,6 @@
   flex-direction: column;
   justify-content: center;
   width: 100%;
-
 }
 
 .bioContainer p {
@@ -84,10 +82,10 @@
 
 .settings {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   color: #c0c0c0;
   padding-top: 2rem;
   /* border-right: solid white; */
@@ -160,7 +158,7 @@
 }
 
 .saveBtn {
-  width: 10%;
+  width: 20%;
   margin: 1rem;
   padding: .5rem 1rem;
   font-size: 1.5rem;
@@ -174,6 +172,7 @@
   cursor: pointer;
   transform: scale(1.1);
 }
+
 .saveBtn:active {
   transform: scale(1);
 }
