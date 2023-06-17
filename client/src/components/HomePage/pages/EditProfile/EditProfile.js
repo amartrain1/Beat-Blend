@@ -36,13 +36,8 @@ const EditProfile = () => {
 
   useEffect(() => {
     if (data && data.getUser) {
-      console.log(data.getUser)
-      setFormState({
-        name: data.getUser.name,
-        username: data.getUser.username,
-        email: data.getUser.email,
-        bio: data.getUser.bio,
-      });
+      const { name, username, email, bio } = data.getUser;
+      setFormState({ name, username, email, bio });
     }
   }, [data]);
 
