@@ -102,13 +102,16 @@ const resolvers = {
       }
       // throw new AuthenticationError("You need to be logged in!");
     },
-    updateUser: async (_, { id, username, email }) => {
+    updateUser: async (_, { id, name, username, email, bio }) => {
       try {
+        console.log("Received request to update user", id); //! REMOVE
+        console.log("Updated values:", name, username, email, bio); //! REMOVE
         const user = await User.findByIdAndUpdate(
           id,
           { username, email, bio },
           { new: true }
         );
+        console.log("Updated user:", user); //! REMOVE
         return user;
       } catch (error) {
         console.error(error);
