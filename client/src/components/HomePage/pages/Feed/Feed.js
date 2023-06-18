@@ -8,17 +8,22 @@ import download from "../../../photos/download.png";
 import heart from "../../../photos/heart.png";
 import liked from "../../../photos/heart full.png";
 
-const Feed = ({ posts }) => {
-  const [like, setLike] = useState(false);
+const Feed = () => {
+  const [likes, setLikes] = useState(Array(6).fill(false));
 
-  const handleLike = () => {
-    if (!like) {
-      setLike(true);
-    }
-    if (like) {
-      setLike(false);
-    }
-  };
+ const handleLike = (index) => {
+   const updatedLikes = [...likes];
+   updatedLikes[index] = !updatedLikes[index];
+   setLikes(updatedLikes);
+ };
+
+ const handlePlay = () => {
+   console.log("Play button has been clicked");
+ };
+
+ const handleDownload = () => {
+   console.log("Download button has been clicked");
+ };
 
   return (
     <>
@@ -27,14 +32,15 @@ const Feed = ({ posts }) => {
         <div className="feedElement">
           <div className="topBar">
             <div className="userInfo">
-              <img className="pfp" src={pfp}></img>
+              <img className="pfp" src={pfp} alt="Profile" />
               <div className="username">@username | 1h</div>
             </div>
             <div className="likeBtn">
               <img
                 className="heart"
-                onClick={handleLike}
-                src={!like ? heart : liked}
+                onClick={() => handleLike(0)}
+                src={!likes[0] ? heart : liked}
+                alt="Like"
               />
             </div>
           </div>
@@ -45,22 +51,33 @@ const Feed = ({ posts }) => {
             aliquip ex ea commodo consequat.
           </p>
           <div className="recordingContainer">
-            <img className="playBtn" src={play} />
-            <img className="playBar" src={playBar} />
-            <img className="download" src={download} />
+            <img
+              className="playBtn"
+              src={play}
+              alt="Play"
+              onClick={handlePlay}
+            />
+            <img className="playBar" src={playBar} alt="Progress Bar" />
+            <img
+              className="download"
+              src={download}
+              alt="Download"
+              onClick={handleDownload}
+            />
           </div>
         </div>
         <div className="feedElement">
           <div className="topBar">
             <div className="userInfo">
-              <img className="pfp" src={pfp}></img>
+              <img className="pfp" src={pfp} alt="Profile" />
               <div className="username">@username | 1h</div>
             </div>
             <div className="likeBtn">
               <img
                 className="heart"
-                onClick={handleLike}
-                src={!like ? heart : liked}
+                onClick={() => handleLike(1)}
+                src={!likes[1] ? heart : liked}
+                alt="Like"
               />
             </div>
           </div>
@@ -71,22 +88,33 @@ const Feed = ({ posts }) => {
             aliquip ex ea commodo consequat.
           </p>
           <div className="recordingContainer">
-            <img className="playBtn" src={play} />
-            <img className="playBar" src={playBar} />
-            <img className="download" src={download} />
+            <img
+              className="playBtn"
+              src={play}
+              alt="Play"
+              onClick={handlePlay}
+            />
+            <img className="playBar" src={playBar} alt="Progress Bar" />
+            <img
+              className="download"
+              src={download}
+              alt="Download"
+              onClick={handleDownload}
+            />
           </div>
         </div>
         <div className="feedElement">
           <div className="topBar">
             <div className="userInfo">
-              <img className="pfp" src={pfp}></img>
+              <img className="pfp" src={pfp} alt="Profile" />
               <div className="username">@username | 1h</div>
             </div>
             <div className="likeBtn">
               <img
                 className="heart"
-                onClick={handleLike}
-                src={!like ? heart : liked}
+                onClick={() => handleLike(2)}
+                src={!likes[2] ? heart : liked}
+                alt="Like"
               />
             </div>
           </div>
@@ -97,22 +125,33 @@ const Feed = ({ posts }) => {
             aliquip ex ea commodo consequat.
           </p>
           <div className="recordingContainer">
-            <img className="playBtn" src={play} />
-            <img className="playBar" src={playBar} />
-            <img className="download" src={download} />
+            <img
+              className="playBtn"
+              src={play}
+              alt="Play"
+              onClick={handlePlay}
+            />
+            <img className="playBar" src={playBar} alt="Progress Bar" />
+            <img
+              className="download"
+              src={download}
+              alt="Download"
+              onClick={handleDownload}
+            />
           </div>
         </div>
         <div className="feedElement">
           <div className="topBar">
             <div className="userInfo">
-              <img className="pfp" src={pfp}></img>
+              <img className="pfp" src={pfp} alt="Profile" />
               <div className="username">@username | 1h</div>
             </div>
             <div className="likeBtn">
               <img
                 className="heart"
-                onClick={handleLike}
-                src={!like ? heart : liked}
+                onClick={() => handleLike(3)}
+                src={!likes[3] ? heart : liked}
+                alt="Like"
               />
             </div>
           </div>
@@ -123,22 +162,33 @@ const Feed = ({ posts }) => {
             aliquip ex ea commodo consequat.
           </p>
           <div className="recordingContainer">
-            <img className="playBtn" src={play} />
-            <img className="playBar" src={playBar} />
-            <img className="download" src={download} />
+            <img
+              className="playBtn"
+              src={play}
+              alt="Play"
+              onClick={handlePlay}
+            />
+            <img className="playBar" src={playBar} alt="Progress Bar" />
+            <img
+              className="download"
+              src={download}
+              alt="Download"
+              onClick={handleDownload}
+            />
           </div>
         </div>
         <div className="feedElement">
           <div className="topBar">
             <div className="userInfo">
-              <img className="pfp" src={pfp}></img>
+              <img className="pfp" src={pfp} alt="Profile" />
               <div className="username">@username | 1h</div>
             </div>
             <div className="likeBtn">
               <img
                 className="heart"
-                onClick={handleLike}
-                src={!like ? heart : liked}
+                onClick={() => handleLike(4)}
+                src={!likes[4] ? heart : liked}
+                alt="Like"
               />
             </div>
           </div>
@@ -149,22 +199,33 @@ const Feed = ({ posts }) => {
             aliquip ex ea commodo consequat.
           </p>
           <div className="recordingContainer">
-            <img className="playBtn" src={play} />
-            <img className="playBar" src={playBar} />
-            <img className="download" src={download} />
+            <img
+              className="playBtn"
+              src={play}
+              alt="Play"
+              onClick={handlePlay}
+            />
+            <img className="playBar" src={playBar} alt="Progress Bar" />
+            <img
+              className="download"
+              src={download}
+              alt="Download"
+              onClick={handleDownload}
+            />
           </div>
         </div>
         <div className="feedElement">
           <div className="topBar">
             <div className="userInfo">
-              <img className="pfp" src={pfp}></img>
+              <img className="pfp" src={pfp} alt="Profile" />
               <div className="username">@username | 1h</div>
             </div>
             <div className="likeBtn">
               <img
                 className="heart"
-                onClick={handleLike}
-                src={!like ? heart : liked}
+                onClick={() => handleLike(5)}
+                src={!likes[5] ? heart : liked}
+                alt="Like"
               />
             </div>
           </div>
@@ -175,9 +236,19 @@ const Feed = ({ posts }) => {
             aliquip ex ea commodo consequat.
           </p>
           <div className="recordingContainer">
-            <img className="playBtn" src={play} />
-            <img className="playBar" src={playBar} />
-            <img className="download" src={download} />
+            <img
+              className="playBtn"
+              src={play}
+              alt="Play"
+              onClick={handlePlay}
+            />
+            <img className="playBar" src={playBar} alt="Progress Bar" />
+            <img
+              className="download"
+              src={download}
+              alt="Download"
+              onClick={handleDownload}
+            />
           </div>
         </div>
       </div>
