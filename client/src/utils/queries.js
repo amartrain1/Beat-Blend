@@ -11,6 +11,12 @@ export const GET_USER = gql`
       id
       email
       bio
+      posts {
+        _id
+        postText
+        postAuthor
+        createdAt
+      }
     }
   }
 `;
@@ -33,12 +39,10 @@ export const QUERY_ME = gql`
 
 export const GET_POSTS = gql`
   query Query {
-    getUsers {
-      username
-      posts {
-        postText
-        postAuthor
-      }
-    }
+      getPosts {
+    createdAt
+    postText
+    postAuthor
+  }
   }
 `;

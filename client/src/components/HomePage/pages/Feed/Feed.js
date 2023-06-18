@@ -8,7 +8,7 @@ import download from "../../../photos/download.png";
 import heart from "../../../photos/heart.png";
 import liked from "../../../photos/heart full.png";
 
-const Feed = () => {
+const Feed = ({ posts }) => {
   const [like, setLike] = useState(false);
 
   const handleLike = () => {

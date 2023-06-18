@@ -9,7 +9,7 @@ const typeDefs = gql`
     password: String!
     bio: String
     comments: [Comment]
-    posts: [Post]!
+    posts: [Post]
   }
 
   type Comment {
@@ -50,7 +50,7 @@ const typeDefs = gql`
     updateUser(id: ID!, name: String, username: String, email: String, bio: String): User!
     deleteUser(id: ID!): User!
     userName: String
-    addPost(postText: String!): Post
+    addPost(postText: String!, postAudio: String): Post
   }
 `;
 

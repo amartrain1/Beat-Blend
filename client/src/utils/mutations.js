@@ -60,3 +60,11 @@ export const GET_USER = gql`
     }
   }
 `;
+
+export const ADD_POST = gql`
+  mutation AddPost($postText: String!, $postAudio: String) {
+    addPost(postText: $postText, postAudio: $postAudio) {
+      _id      
+    }
+  }
+`;
