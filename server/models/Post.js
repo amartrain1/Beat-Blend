@@ -5,11 +5,16 @@ const postSchema = new Schema ({
     postText: {
         type: String,
         required: true,
-        maxlength: 200
+        minlength: 1,
+        maxlength: 200,
+        trim: true,
     },
     postAuthor: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        // type: Schema.Types.ObjectId,
+        // ref: "User"
     },
     postAudio: {
         type: String,

@@ -5,7 +5,7 @@ const resolvers = {
   Query: {
     getUser: async (_, { id }) => {
       try {
-        const user = await User.findById(id);
+        const user = await User.findById(id).populate("posts");
         return user;
       } catch (error) {
         console.error(error);
@@ -14,7 +14,7 @@ const resolvers = {
     },
     getUsers: async () => {
       try {
-        const users = await User.find({});
+        const users = await User.find({}).populate("posts");
         return users;
       } catch (error) {
         console.error(error);
@@ -46,18 +46,19 @@ const resolvers = {
         return post;
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to fetch user");
+        throw new Error("Failed to fetch post");
       }
     },
-    getPosts: async () => {
+    getPosts: async (parent, { username }) => {
+      const params = username ? { username } : {};
       try {
-        const posts = await Post.find({});
+        const posts = await Post.find({params}).sort({ createdAt: -1  });
         return posts;
       } catch (error) {
         console.error(error);
         throw new Error("Failed to fetch posts");
       }
-    }
+    },
   },
   Mutation: {
     createUser: async (_, { username, email, password }) => {
@@ -137,7 +138,7 @@ const resolvers = {
       }
     },
     addPost: async (parent, { postText, postAudio }, context) => {
-      console.log(context)
+      console.log(context);
       if (context.user) {
         const post = await Post.create({
           postText,
@@ -147,8 +148,9 @@ const resolvers = {
 
         await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { posts: post._id } }
-        )
+          { posts: postText },
+          { new: true }
+        );
         return post;
       }
     },
