@@ -39,10 +39,10 @@ export const QUERY_ME = gql`
 
 export const GET_POSTS = gql`
   query Query {
-      getPosts {
-    createdAt
-    postText
-    postAuthor
-  }
+    getPosts {
+      createdAt
+      postText
+      postAuthor
+    }
   }
 `;
