@@ -49,10 +49,9 @@ const resolvers = {
         throw new Error("Failed to fetch post");
       }
     },
-    getPosts: async (parent, { username }) => {
-      const params = username ? { username } : {};
+    getPosts: async (_parent, args) => {
       try {
-        const posts = await Post.find({params}).sort({ createdAt: -1  });
+        const posts = await Post.find({}).sort({ createdAt: -1  });
         return posts;
       } catch (error) {
         console.error(error);
@@ -147,8 +146,8 @@ const resolvers = {
         });
 
         await User.findByIdAndUpdate(
-          { _id: context.user._id },
-          { posts: postText },
+          context.user._id,
+          { $push: { posts: post._id } },
           { new: true }
         );
         return post;
