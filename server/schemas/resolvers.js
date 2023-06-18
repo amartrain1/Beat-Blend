@@ -5,7 +5,7 @@ const resolvers = {
   Query: {
     getUser: async (_, { id }) => {
       try {
-        const user = await User.findById(id).populate("posts");
+        const user = await User.findById(id).populate("posts").sort({ createdAt: -1 });
         return user;
       } catch (error) {
         console.error(error);
@@ -51,7 +51,7 @@ const resolvers = {
     },
     getPosts: async (_parent, args) => {
       try {
-        const posts = await Post.find({}).sort({ createdAt: -1  });
+        const posts = await Post.find({}).sort({ createdAt: -1 });
         return posts;
       } catch (error) {
         console.error(error);
