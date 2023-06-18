@@ -18,10 +18,12 @@ const Posts = ({ posts }) => {
       setLike(false);
     }
   };
+
+  const reversedPosts = [...posts].reverse();
   
   return (
     <>
-    {posts.map((post) => (  
+    {reversedPosts.map((post) => (  
       <div key={post._id} className="feedElement">
         <div className="topBar">
           <div className="userInfo">

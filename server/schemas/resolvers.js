@@ -51,7 +51,7 @@ const resolvers = {
     },
     getPosts: async (_parent, args) => {
       try {
-        const posts = await Post.find({}).sort({ createdAt: -1  });
+        const posts = await Post.find({}).sort({ createdAt: 1  });
         return posts;
       } catch (error) {
         console.error(error);
