@@ -1,11 +1,11 @@
-const { User, Comment } = require("../models");
+const { User, Comment, Post } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     getUser: async (_, { id }) => {
       try {
-        const user = await User.findById(id);
+        const user = await User.findById(id).populate("posts");
         return user;
       } catch (error) {
         console.error(error);
@@ -14,7 +14,7 @@ const resolvers = {
     },
     getUsers: async () => {
       try {
-        const users = await User.find({});
+        const users = await User.find({}).populate("posts");
         return users;
       } catch (error) {
         console.error(error);
@@ -38,6 +38,25 @@ const resolvers = {
       } catch (error) {
         console.error(error);
         throw new Error("Failed to fetch comments");
+      }
+    },
+    getPost: async (_, { id }) => {
+      try {
+        const post = await Post.findById(id);
+        return post;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to fetch post");
+      }
+    },
+    getPosts: async (parent, { username }) => {
+      const params = username ? { username } : {};
+      try {
+        const posts = await Post.find({params}).sort({ createdAt: -1  });
+        return posts;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to fetch posts");
       }
     },
   },
@@ -108,7 +127,7 @@ const resolvers = {
         console.log("Updated values:", name, username, email, bio); //! REMOVE
         const user = await User.findByIdAndUpdate(
           id,
-          { name, username, email, bio },
+          { username, email, bio, name },
           { new: true }
         );
         console.log("Updated user:", user); //! REMOVE
@@ -118,6 +137,24 @@ const resolvers = {
         throw new Error("Failed to update user");
       }
     },
+    addPost: async (parent, { postText, postAudio }, context) => {
+      console.log(context);
+      if (context.user) {
+        const post = await Post.create({
+          postText,
+          postAudio,
+          postAuthor: context.user.username,
+        });
+
+        await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { posts: postText },
+          { new: true }
+        );
+        return post;
+      }
+    },
   },
 };
+
 module.exports = resolvers;

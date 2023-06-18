@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import jwtDecode from "jwt-decode";
 import "./profile.css";
 import pfp from "../../../photos/pfp placeholder.png";
 import Posts from "./Posts/Posts";
 import MyRecordings from "./myRecordings/myRecordings";
 import { GET_USER } from "../../../../utils/queries";
-
 
 const Profile = () => {
   const token = localStorage.getItem("id_token");

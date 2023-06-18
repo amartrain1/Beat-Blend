@@ -9,12 +9,23 @@ const typeDefs = gql`
     password: String!
     bio: String
     comments: [Comment]
+    posts: [Post]!
   }
+
   type Comment {
     _id: ID
     commentText: String
     commentAuthor: String
     createdAt: String
+  }
+
+  type Post {
+    _id: ID
+    postText: String
+    postAuthor: String
+    postAudio: String
+    createdAt: String!
+    comments: [Comment]
   }
 
   type Auth {
@@ -27,6 +38,8 @@ const typeDefs = gql`
     getUsers: [User!]!
     getComments: [Comment]
     getComment(id: ID): Comment
+    getPost(id: ID!): Post!
+    getPosts: [Post!]!
   }
 
   type Mutation {
@@ -37,6 +50,7 @@ const typeDefs = gql`
     updateUser(id: ID!, name: String, username: String, email: String, bio: String): User!
     deleteUser(id: ID!): User!
     userName: String
+    addPost(postText: String!): Post
   }
 `;
 

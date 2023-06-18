@@ -43,7 +43,6 @@ const userSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "Post",
-      max: 200,
     }
   ],
 });

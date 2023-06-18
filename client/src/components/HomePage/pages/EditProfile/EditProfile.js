@@ -28,6 +28,8 @@ const EditProfile = () => {
     bio: "",
   });
 
+
+
   const [updateUser, { loading: updateLoading, error: updateError }] = useMutation(
     UPDATE_USER
   );

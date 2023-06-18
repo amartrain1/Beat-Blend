@@ -31,6 +31,7 @@ export const UPDATE_USER = gql`
       name
       username
       email
+      bio
     }
   }
 `;
@@ -50,3 +51,12 @@ mutation AddBio($bioText: String!) {
     bio
   }
 }`;
+
+export const GET_USER = gql`
+  query GetUser($userId: ID!) {
+    getUser(id: $userId) {
+      username
+      bio
+    }
+  }
+`;
