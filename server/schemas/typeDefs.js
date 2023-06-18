@@ -9,19 +9,22 @@ const typeDefs = gql`
     password: String!
     bio: String
     comments: [Comment]
+    posts: [Post]!
   }
+
   type Comment {
     _id: ID
     commentText: String
     commentAuthor: String
     createdAt: String
   }
+
   type Post {
     _id: ID
     postText: String
     postAuthor: String
     postAudio: String
-    createdAt: String
+    createdAt: String!
     comments: [Comment]
   }
 
