@@ -52,5 +52,19 @@ mutation AddBio($bioText: String!) {
   }
 }`;
 
-// export const ADD_POST = gql`
+export const GET_USER = gql`
+  query GetUser($userId: ID!) {
+    getUser(id: $userId) {
+      username
+      bio
+    }
+  }
+`;
 
+export const ADD_POST = gql`
+  mutation AddPost($postText: String!, $postAudio: String) {
+    addPost(postText: $postText, postAudio: $postAudio) {
+      _id      
+    }
+  }
+`;

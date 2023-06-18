@@ -9,7 +9,7 @@ const typeDefs = gql`
     password: String!
     bio: String
     comments: [Comment]
-    posts: [Post]!
+    posts: [Post]
   }
 
   type Comment {

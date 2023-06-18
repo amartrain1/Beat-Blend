@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-//useRef hook added
+import { useMutation } from "@apollo/client";
 import HeaderNav from "../Header/HeaderNav";
 import "./homePage.css";
 import Feed from "./pages/Feed/Feed";
@@ -12,6 +12,7 @@ import Search from "./pages/Search/Search";
 import Favorites from "./pages/Favorites/Favorites";
 import Record from "./pages/Record/Record";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import { ADD_POST } from "../../utils/mutations";
 
 const HomePage = () => {
   const [length, setLength] = useState(0);
@@ -72,11 +73,28 @@ const HomePage = () => {
     setSelectedAudio(file);
   };
 
+  const [addPost] = useMutation(ADD_POST);
+
   const handleAudioUpload = () => {
-    if (selectedAudio) {
-      // Perform the upload logic here
+    // if (selectedAudio) {
       console.log("Uploading audio:", selectedAudio);
-    }
+      const postText = document.getElementById("textInput").value;
+
+      addPost({
+        variables: {
+          postText: postText,
+          postAudio: selectedAudio,
+        }
+      })
+      .then((response) => {
+        console.log("Post added:", response.data.addPost);
+        document.getElementById("textInput").value = "";
+        setSelectedAudio(null);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    // }
   };
 
   return (

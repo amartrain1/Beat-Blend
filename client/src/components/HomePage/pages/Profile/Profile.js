@@ -17,7 +17,7 @@ const Profile = () => {
 
   const botHalfRender = () => {
     if (botHalf === "Posts") {
-      return <Posts />;
+      return <Posts posts={data.getUser.posts} />;
     }
     if (botHalf === "myRecordings") {
       return <MyRecordings />;
@@ -33,6 +33,8 @@ const Profile = () => {
       userId: userId,
     },
   });
+
+  console.log(data);  //!
 
   const [userData, setUserData] = useState(null);
 

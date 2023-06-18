@@ -49,7 +49,7 @@ const resolvers = {
         throw new Error("Failed to fetch post");
       }
     },
-    getPosts: async () => {
+    getPosts: async (_parent, args) => {
       try {
         const posts = await Post.find({}).sort({ createdAt: -1  });
         return posts;
@@ -147,7 +147,7 @@ const resolvers = {
 
         await User.findByIdAndUpdate(
           context.user._id,
-          { $push: {posts: post._id}},
+          { $push: { posts: post._id } },
           { new: true }
         );
         return post;
