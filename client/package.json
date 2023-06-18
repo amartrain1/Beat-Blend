@@ -13,6 +13,7 @@
     "bcrypt": "^5.1.0",
     "framer-motion": "^10.12.16",
     "graphql": "^15.4.0",
+    "hamburger-react": "^2.5.0",
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "react-audio-voice-recorder": "^1.2.1",
