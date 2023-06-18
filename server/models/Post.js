@@ -13,8 +13,6 @@ const postSchema = new Schema ({
         type: String,
         required: true,
         trim: true,
-        // type: Schema.Types.ObjectId,
-        // ref: "User"
     },
     postAudio: {
         type: String,
