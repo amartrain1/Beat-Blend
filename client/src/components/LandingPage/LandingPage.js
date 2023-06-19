@@ -5,7 +5,6 @@ import gql from 'graphql-tag';
 import LogInForm from "./LogInForm/LogInForm";
 import SignUpForm from "./SignUpForm/SignUpForm";
 import "./landing.css";
-import { AnimatePresence } from "framer-motion";
 import logo from '../photos/beat_blend_logo_1_transparent.png'
 import AuthService from "../../utils/auth";
 
@@ -97,13 +96,11 @@ const LandingPage = () => {
             Log In
           </div>
         </div>
-        <AnimatePresence>
           {signUp ? (
             <SignUpForm handleSignUp={handleSignUp} error={error} setError={setError} />
           ) : (
             <LogInForm handleLogIn={handleLogIn} error={error} setError={setError} />
           )}
-        </AnimatePresence>
       </div>
     </div>
   );
