@@ -64,6 +64,11 @@ const EditProfile = () => {
   };
 
   const [length, setLength] = useState(0);
+
+  useEffect(() => {
+    setLength(formState.bio.length);
+  });
+
   const countLength = (event) => {
     setLength(event.target.value.length);
   };

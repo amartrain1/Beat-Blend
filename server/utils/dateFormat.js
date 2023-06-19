@@ -1,41 +1,41 @@
-const addDateSuffix = (date) => {
-  let dateStr = date.toString();
+// const addDateSuffix = (date) => {
+//   let dateStr = date.toString();
 
-  // get last char of date string
-  const lastChar = dateStr.charAt(dateStr.length - 1);
+//   // get last char of date string
+//   const lastChar = dateStr.charAt(dateStr.length - 1);
 
-  if (lastChar === "1" && dateStr !== "11") {
-    dateStr = `${dateStr}st`;
-  } else if (lastChar === "2" && dateStr !== "12") {
-    dateStr = `${dateStr}nd`;
-  } else if (lastChar === "3" && dateStr !== "13") {
-    dateStr = `${dateStr}rd`;
-  } else {
-    dateStr = `${dateStr}th`;
-  }
+//   if (lastChar === "1" && dateStr !== "11") {
+//     dateStr = `${dateStr}st`;
+//   } else if (lastChar === "2" && dateStr !== "12") {
+//     dateStr = `${dateStr}nd`;
+//   } else if (lastChar === "3" && dateStr !== "13") {
+//     dateStr = `${dateStr}rd`;
+//   } else {
+//     dateStr = `${dateStr}th`;
+//   }
 
-  return dateStr;
-};
+//   return dateStr;
+// };
 
 // function to format a timestamp, accepts the timestamp and an `options` object as parameters
 module.exports = (
   timestamp,
-  { monthLength = "short", dateSuffix = true } = {}
+  { dateSuffix = false } = {}
 ) => {
   // create month object
   const months = {
-    0: monthLength === "short" ? "Jan" : "January",
-    1: monthLength === "short" ? "Feb" : "February",
-    2: monthLength === "short" ? "Mar" : "March",
-    3: monthLength === "short" ? "Apr" : "April",
-    4: monthLength === "short" ? "May" : "May",
-    5: monthLength === "short" ? "Jun" : "June",
-    6: monthLength === "short" ? "Jul" : "July",
-    7: monthLength === "short" ? "Aug" : "August",
-    8: monthLength === "short" ? "Sep" : "September",
-    9: monthLength === "short" ? "Oct" : "October",
-    10: monthLength === "short" ? "Nov" : "November",
-    11: monthLength === "short" ? "Dec" : "December",
+    0: "1",
+    1: "2",
+    2: "3",
+    3: "4",
+    4: "5",
+    5: "6",
+    6: "7",
+    7: "8",
+    8: "9",
+    9: "10",
+    10: "11",
+    11: "12",
   };
 
   const dateObj = new Date(timestamp);
@@ -45,7 +45,7 @@ module.exports = (
     ? addDateSuffix(dateObj.getDate())
     : dateObj.getDate();
 
-  const year = dateObj.getFullYear();
+  const year = dateObj.getFullYear().toString().slice(2)
   let hour =
     dateObj.getHours() > 12
       ? Math.floor(dateObj.getHours() - 12)
@@ -61,7 +61,7 @@ module.exports = (
   // set `am` or `pm`
   const periodOfDay = dateObj.getHours() >= 12 ? "pm" : "am";
 
-  const formattedTimeStamp = `${formattedMonth} ${dayOfMonth}, ${year} at ${hour}:${minutes} ${periodOfDay}`;
-
+  const formattedTimeStamp = `${formattedMonth}/${dayOfMonth}/${year} · ${hour}:${minutes}${periodOfDay}`;
+  // 0/0/00 00:00pm
   return formattedTimeStamp;
 };
