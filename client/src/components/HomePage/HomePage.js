@@ -73,9 +73,18 @@ const HomePage = () => {
     setSelectedAudio(file);
   };
 
-  const [addPost] = useMutation(ADD_POST);
+  const [addPost, { loading: updateLoading, error: updateError }] = useMutation(ADD_POST, {
+    onCompleted: (data) => {
+      console.log("Post added:", data.addPost);
+      setLength(0);
+      window.location.reload();
+    },
+    onError: (error) => {
+      console.error(error.message);
+    },
+  });
 
-  const handleAudioUpload = () => {
+  const handlePost = () => {
     // if (selectedAudio) {
       console.log("Uploading audio:", selectedAudio);
       const postText = document.getElementById("textInput").value;
@@ -92,7 +101,7 @@ const HomePage = () => {
         setSelectedAudio(null);
       })
       .catch((error) => {
-        console.error(error);
+        console.error(error.message);
       });
     // }
   };
@@ -228,7 +237,7 @@ const HomePage = () => {
               />
               <div className="upload postBtn">Monetize?</div>
             </div>
-            <div className="post bigPostBtn" onClick={handleAudioUpload}>
+            <div className="post bigPostBtn" onClick={handlePost}>
               Post!
             </div>
           </div>
