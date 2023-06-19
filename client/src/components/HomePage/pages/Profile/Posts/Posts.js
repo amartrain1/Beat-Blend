@@ -42,6 +42,7 @@ const Posts = ({ posts }) => {
        {post.postText}
         </p>
         <div className="recordingContainer">
+          
           <img className="playBtn" src={play} />
           <img className="playBar" src={playBar} />
           <img className="download" src={download} />
