@@ -63,15 +63,15 @@ const EditProfile = () => {
     setSelectedImage(file);
   };
 
-  const [length, setLength] = useState(0);
+  // const [length, setLength] = useState(0);
 
-  useEffect(() => {
-    setLength(formState.bio.length);
-  });
+  // useEffect(() => {
+  //   setLength(formState.bio.length);
+  // });
 
-  const countLength = (event) => {
-    setLength(event.target.value.length);
-  };
+  // const countLength = (event) => {
+  //   setLength(event.target.value.length);
+  // };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -102,7 +102,7 @@ const EditProfile = () => {
             <div className="bioContainer">
               <div className="settingLabel">Bio:</div>
               <p>
-                <span className={length > 150 ? "red" : "green"}>{length}</span>
+                {/* <span className={length > 150 ? "red" : "green"}>{length}</span> */}
                 /150
               </p>
               <textarea
@@ -112,7 +112,7 @@ const EditProfile = () => {
                 placeholder="Enter Bio (150 char max)"
                 onChange={(e) => {
                   setFormState({ ...formState, bio: e.target.value });
-                  countLength(e);
+                  // countLength(e);
                 }}
                 rows="3"
                 value={formState.bio}
