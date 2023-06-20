@@ -9,7 +9,6 @@ import Notifications from "./pages/Notifications/Notifications";
 import Posts from "./pages/Profile/Posts/Posts";
 import Recordings from "./pages/Profile/myRecordings/myRecordings";
 import Search from "./pages/Search/Search";
-import Favorites from "./pages/Favorites/Favorites";
 import Record from "./pages/Record/Record";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import { ADD_POST } from "../../utils/mutations";

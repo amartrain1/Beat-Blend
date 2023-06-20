@@ -18,8 +18,9 @@ const Posts = ({ posts }) => {
       setLike(false);
     }
   };
-  
+
   const reversedPosts = [...posts].reverse();
+
   
   return (
     <>

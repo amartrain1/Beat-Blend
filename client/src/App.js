@@ -1,6 +1,6 @@
 import React from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
-import { BrowserRouter as Router, Routes, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { setContext } from '@apollo/client/link/context';
 import LandingPage from './components/LandingPage/LandingPage';
 import HomePage from './components/HomePage/HomePage';
@@ -9,7 +9,7 @@ import EditProfile from './components/HomePage/pages/EditProfile/EditProfile';
 import Profile from './components/HomePage/pages/Profile/Profile';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3001/graphql',
+  uri: 'https://beat-blend1-d7a18402c8e3.herokuapp.com/graphql/',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -20,6 +20,7 @@ const authLink = setContext((_, { headers }) => {
       authorization: token ? `Bearer ${token}` : '',
     },
   };
+
 });
 
 const client = new ApolloClient({
