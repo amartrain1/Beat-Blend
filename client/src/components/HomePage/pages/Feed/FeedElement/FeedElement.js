@@ -8,6 +8,7 @@ import playBar from "../../../../photos/play bar.png";
 import download from "../../../../photos/download.png";
 import heart from "../../../../photos/heart.png";
 import liked from "../../../../photos/heart full.png";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 
 const FeedElement = ({ post }) => {
   // const [likes, setLikes] = useState(Array(6).fill(false));
@@ -18,7 +19,7 @@ const FeedElement = ({ post }) => {
   // };
 
   const [postLiked, setPostLiked] = useState(false);
-  const handleLike = (index) => {
+  const handleLike = () => {
     if (!postLiked) {
       setPostLiked(true);
     }
@@ -46,15 +47,14 @@ const FeedElement = ({ post }) => {
         </div>
         <p>{post.postText}</p>
         <p>{post.postAudio}</p>
-        <div className="recordingContainer">
-          <img className="playBtn" src={play} alt="Play" />
-          <img className="playBar" src={playBar} alt="Progress Bar" />
-          <img
-            className="download"
-            src={download}
-            alt="Download"
-            // onClick={handleDownload}
-          />
+        <div className="singleRecording">
+          <audio class="playBar" src="blob:http://localhost:3000/e2a186c7-dd18-4383-b010-94497f07034a" controls />
+          {/* <button className="recordBtn">
+            Delete
+          </button>
+          <button className="recordBtn">
+            Download
+          </button> */}
         </div>
       </div>
     </>

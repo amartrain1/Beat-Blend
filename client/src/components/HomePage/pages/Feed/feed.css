@@ -98,3 +98,14 @@
 .heart:hover {
   cursor: pointer;
 }
+
+.playBar {
+  width: 100%;
+  margin: 1rem 0 0 0;
+  display: flex;
+  justify-content: center;
+  box-shadow: unset;
+  border-radius: 2rem;
+  filter: invert(21%);
+
+}
