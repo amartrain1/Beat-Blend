@@ -20,8 +20,7 @@ const Posts = ({ posts }) => {
   };
 
   const reversedPosts = [...posts].reverse();
-  
-  const reversedPosts = [...posts].reverse();
+
   
   return (
     <>
